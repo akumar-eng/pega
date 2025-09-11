@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story } from '@storybook/blocks';
+import * as DemoStories from './demo.stories';
+
+<Meta of={DemoStories} name='LHC Docs' />
+
+# Overview
+
+The LHC Display Attachments allows to render the attachments in a read-only mode. This widget is not a replacement of the attachment widget since it does not let you upload, delete or edit existing attachments.
+
+If 'useAttachmentEndpoint' is true, the widget will use the OOB attachment DX API to retrieve all the attachments - You can filter the attachments to display by providing a comma-separated list of 'categories'. If this parameter is false,
+you must provide a list DataPage that will be used to get all the attachments - the filtering must be done on the server within the DP directly. The Data page will be called with the parameter 'LinkRefFrom' that will contain the case InsKey.
+To create this DP, you can look at how the DP D_AttachmentList and customize the report definition.
+
+You can also change the 'displayFormat' to render either as a list (when using in the Utility column)
+or as a set of tiles (when rendered in a Details view), or as a table format for more detailed viewing.
+
+## Table Grouping Feature
+
+When using the table display format, you can now group attachments by:
+- **Category**: Groups attachments by their category/type
+- **Date**: Groups attachments by their creation date
+
+The grouping selector appears above the table and allows users to dynamically change how attachments are organized. Each group shows the group name and item count, making it easier to navigate large sets of attachments.
+
+## Attachment Count Display
+
+All display formats now show the total number of attachments:
+- **List Format**: Shows count below the summary list
+- **Tiles Format**: Shows count in the header next to the title
+- **Table Format**: Shows count in the top control bar next to the grouping selector
+
+This provides users with immediate visibility into the total number of attachments without needing to count manually or view all items.
+
+Images can also be rendered in a Lightbox component instead of being opened in a new browser tab. It is also possible to expose a 'Download all' action that will let you download all the files at once.
+
+<Primary />
+
+## Props
+
+<Controls />
+
+## Example
+
+Here is an example of using the Display Attachments widget using the 'tiles' displayFormat inside a details tab or using the 'list' displayFormat in the utility column.
+
+![Example of using the Display Attachments in a Case View](DisplayAttachments_Demo.png)
