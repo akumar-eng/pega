@@ -327,10 +327,11 @@ export const Default: Story = DisplayAttachmentsDemo({
 
 export const Tiles: Story = DisplayAttachmentsDemo({
   heading: 'Display attachments',
-  categories: '',
+  categories: 'Document,Image,Spreadsheet,Presentation',
   useLightBox: true,
   useAttachmentEndpoint: true,
   enableDownloadAll: true,
+  enableUpload: true,
   dataPage: 'D_AttachmentListRO',
   displayFormat: 'tiles',
   iconName: 'clipboard'
@@ -338,10 +339,11 @@ export const Tiles: Story = DisplayAttachmentsDemo({
 
 export const Table: Story = DisplayAttachmentsDemo({
   heading: 'Display attachments',
-  categories: '',
+  categories: 'Document,Image,Audio,Video,Archive',
   useLightBox: false,
   useAttachmentEndpoint: true,
   enableDownloadAll: true,
+  enableUpload: true,
   dataPage: 'D_AttachmentListRO',
   displayFormat: 'table',
   iconName: 'clipboard',
@@ -350,10 +352,11 @@ export const Table: Story = DisplayAttachmentsDemo({
 
 export const TableGroupedByCategory: Story = DisplayAttachmentsDemo({
   heading: 'Display attachments - Grouped by Category',
-  categories: '',
+  categories: 'Document,Spreadsheet,Presentation,Image,Text',
   useLightBox: false,
   useAttachmentEndpoint: true,
   enableDownloadAll: true,
+  enableUpload: true,
   dataPage: 'D_AttachmentListRO',
   displayFormat: 'table',
   iconName: 'clipboard',
@@ -362,12 +365,53 @@ export const TableGroupedByCategory: Story = DisplayAttachmentsDemo({
 
 export const TableGroupedByDate: Story = DisplayAttachmentsDemo({
   heading: 'Display attachments - Grouped by Date',
-  categories: '',
+  categories: 'Document,Image,Audio,Video,Data',
   useLightBox: false,
   useAttachmentEndpoint: true,
   enableDownloadAll: true,
+  enableUpload: true,
   dataPage: 'D_AttachmentListRO',
   displayFormat: 'table',
   iconName: 'clipboard',
   groupBy: 'date'
+});
+
+export const UploadOnly: Story = DisplayAttachmentsDemo({
+  heading: 'Display attachments - Upload Only',
+  categories: 'Document,Image,Spreadsheet,Presentation,Audio,Video,Archive,Text',
+  useLightBox: false,
+  useAttachmentEndpoint: true,
+  enableDownloadAll: false,
+  enableUpload: true,
+  dataPage: 'D_AttachmentListRO',
+  displayFormat: 'table',
+  iconName: 'clipboard',
+  groupBy: 'none'
+});
+
+export const AllFileTypes: Story = DisplayAttachmentsDemo({
+  heading: 'Display attachments - All Supported MIME Types',
+  categories:
+    'Document,Spreadsheet,Presentation,Image,Audio,Video,Archive,Text,Data,Email,Contact,Calendar',
+  useLightBox: false,
+  useAttachmentEndpoint: true,
+  enableDownloadAll: true,
+  enableUpload: true,
+  dataPage: 'D_AttachmentListRO',
+  displayFormat: 'table',
+  iconName: 'clipboard',
+  groupBy: 'category'
+});
+
+export const EmailAndCommunication: Story = DisplayAttachmentsDemo({
+  heading: 'Display attachments - Email & Communication Files',
+  categories: 'Email,Contact,Calendar,Document',
+  useLightBox: false,
+  useAttachmentEndpoint: true,
+  enableDownloadAll: true,
+  enableUpload: true,
+  dataPage: 'D_AttachmentListRO',
+  displayFormat: 'table',
+  iconName: 'clipboard',
+  groupBy: 'category'
 });

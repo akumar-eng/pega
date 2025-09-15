@@ -2,17 +2,18 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { composeStories } from '@storybook/react';
 import * as DemoStories from './demo.stories';
 
-const { Default, Tiles, Table, TableGroupedByCategory, TableGroupedByDate } = composeStories(DemoStories);
+const { Default, Tiles, Table, TableGroupedByCategory, TableGroupedByDate } =
+  composeStories(DemoStories);
 
 test('renders DisplayAttachments component with default args', async () => {
   render(<Default />);
   expect(await screen.findByText('Display attachments')).toBeVisible();
   expect(await screen.findByText('6')).toBeVisible();
   expect(await screen.findByText('pega.com')).toBeVisible();
-  
+
   // Check for total count display
   expect(await screen.findByText(/Total: 6 attachments/)).toBeVisible();
-  
+
   const BtnEl = await screen.findByText('View all');
   expect(BtnEl).toBeVisible();
   fireEvent.click(BtnEl);
@@ -29,10 +30,10 @@ test('renders DisplayAttachments component with tiles args', async () => {
   expect(await screen.findByText('DemoFile')).toBeVisible();
   expect(await screen.findByText('SampleWord')).toBeVisible();
   expect(await screen.findByText('demoPDF')).toBeVisible();
-  
+
   // Check for total count display in tiles format
   expect(await screen.findByText(/Total: 6 attachments/)).toBeVisible();
-  
+
   const BtnEl = await screen.findByLabelText('Download all');
   expect(BtnEl).toBeVisible();
   fireEvent.click(BtnEl);
@@ -60,6 +61,10 @@ test('renders DisplayAttachments component with table format', async () => {
   // Check for download all button
   const downloadAllBtn = await screen.findByLabelText('Download all');
   expect(downloadAllBtn).toBeVisible();
+
+  // Check for select all checkbox in table
+  const selectAllCheckbox = screen.getAllByRole('checkbox')[0];
+  expect(selectAllCheckbox).toBeVisible();
 
   // Check for delete icons (there should be multiple)
   const deleteButtons = screen.getAllByLabelText('Delete');
@@ -90,4 +95,28 @@ test('renders DisplayAttachments component with date grouping', async () => {
   // Should see date-based group headers
   const dateGroups = screen.getAllByText(/2024/);
   expect(dateGroups.length).toBeGreaterThan(0);
+});
+
+test('handles file selection with checkboxes', async () => {
+  render(<Table />);
+
+  // Wait for component to load
+  expect(await screen.findByText('Display attachments')).toBeVisible();
+
+  // Find all checkboxes (header + individual files)
+  const checkboxes = screen.getAllByRole('checkbox');
+  expect(checkboxes.length).toBeGreaterThan(0);
+
+  // The first checkbox should be the "select all" checkbox
+  const selectAllCheckbox = checkboxes[0];
+  expect(selectAllCheckbox).toBeVisible();
+
+  // Initially, no files should be selected
+  expect(selectAllCheckbox).not.toBeChecked();
+
+  // Click on select all
+  fireEvent.click(selectAllCheckbox);
+
+  // After clicking select all, the checkbox should be checked
+  expect(selectAllCheckbox).toBeChecked();
 });

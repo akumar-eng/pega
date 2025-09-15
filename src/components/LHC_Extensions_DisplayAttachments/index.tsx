@@ -18,6 +18,8 @@ import {
   getMimeTypeFromFile,
   useTheme,
   FieldGroup,
+  FileVisual,
+  getKindFromMimeType,
   type SummaryListItem,
   type ModalMethods,
   type ModalProps,
@@ -73,6 +75,496 @@ registerIcon(
   arrowDownIcon
 );
 
+/**
+ * LHC Display Attachments Component with Comprehensive MIME Type Support
+ *
+ * This component now includes extensive MIME type support based on Pega Core libraries:
+ *
+ * Supported File Categories:
+ * - Document: PDF, Word (.doc/.docx/.docm/.dotx/.dotm), RTF, OpenDocument Text (.odt/.odg/.odf)
+ * - Spreadsheet: Excel (.xls/.xlsx/.xlsm/.xlsb/.xltx/.xltm/.xlam), CSV, TSV, OpenDocument Spreadsheet (.ods)
+ * - Presentation: PowerPoint (.ppt/.pptx/.pptm/.potx/.potm/.ppsx/.ppsm), OpenDocument Presentation (.odp)
+ * - Email: Outlook Messages (.msg), Email Files (.eml), MBOX Archives (.mbox)
+ * - Contact: vCard Files (.vcf), Outlook Contacts
+ * - Calendar: iCalendar Files (.ics), Outlook Appointments (.vcs)
+ * - Image: JPEG, PNG, GIF, BMP, WebP, SVG, TIFF, ICO
+ * - Audio: MP3, WAV, OGG, AAC, M4A, WebM Audio
+ * - Video: MP4, AVI, MOV, WebM Video, OGG Video
+ * - Archive: ZIP, RAR, 7-Zip, GZIP, TAR
+ * - Text: Plain Text (.txt), HTML, CSS, JavaScript, XML, Markdown (.md), YAML (.yml/.yaml), INI, Log files, README
+ * - Data: JSON, XML, YAML configurations
+ * - Application: Binary files, Executables, Java Archives
+ *
+ * Microsoft Office Complete Support:
+ * - Word: .doc, .docx, .docm (macro-enabled), .dotx (template), .dotm (macro template)
+ * - Excel: .xls, .xlsx, .xlsm (macro-enabled), .xlsb (binary), .xltx (template), .xltm (macro template), .xlam (add-in)
+ * - PowerPoint: .ppt, .pptx, .pptm (macro-enabled), .potx (template), .potm (macro template), .ppsx (slideshow), .ppsm (macro slideshow)
+ * - Outlook: .msg (messages), .eml (email), .mbox (archives), .vcf (contacts), .ics/.vcs (calendar)
+ *
+ * Text File Complete Support:
+ * - Documents: .txt, .md, .readme, .log
+ * - Data: .csv, .tsv, .json, .xml, .yaml, .yml, .ini
+ * - Web: .html, .css, .js
+ *
+ * Features:
+ * - Auto-categorization based on file MIME types
+ * - Dynamic file accept filters based on configured categories
+ * - Enhanced upload table with file type information
+ * - Intelligent category assignment during file selection
+ * - Support for all MIME types recognized by Pega Cosmos React Core
+ * - Enterprise-grade Microsoft Office file support
+ */
+
+// Comprehensive MIME type definitions based on Pega Core libraries
+const PEGA_SUPPORTED_MIME_TYPES = {
+  // Document Types
+  document: {
+    // PDF Files
+    'application/pdf': { extension: 'pdf', category: 'Document', description: 'PDF Document' },
+
+    // Microsoft Word Files
+    'application/msword': {
+      extension: 'doc',
+      category: 'Document',
+      description: 'Microsoft Word Document (Legacy)'
+    },
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+      extension: 'docx',
+      category: 'Document',
+      description: 'Microsoft Word Document (OpenXML)'
+    },
+    'application/vnd.ms-word.document.macroEnabled.12': {
+      extension: 'docm',
+      category: 'Document',
+      description: 'Microsoft Word Macro-Enabled Document'
+    },
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.template': {
+      extension: 'dotx',
+      category: 'Document',
+      description: 'Microsoft Word Template'
+    },
+    'application/vnd.ms-word.template.macroEnabled.12': {
+      extension: 'dotm',
+      category: 'Document',
+      description: 'Microsoft Word Macro-Enabled Template'
+    },
+
+    // Microsoft Excel Files
+    'application/vnd.ms-excel': {
+      extension: 'xls',
+      category: 'Spreadsheet',
+      description: 'Microsoft Excel Spreadsheet (Legacy)'
+    },
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+      extension: 'xlsx',
+      category: 'Spreadsheet',
+      description: 'Microsoft Excel Spreadsheet (OpenXML)'
+    },
+    'application/vnd.ms-excel.sheet.macroEnabled.12': {
+      extension: 'xlsm',
+      category: 'Spreadsheet',
+      description: 'Microsoft Excel Macro-Enabled Workbook'
+    },
+    'application/vnd.ms-excel.sheet.binary.macroEnabled.12': {
+      extension: 'xlsb',
+      category: 'Spreadsheet',
+      description: 'Microsoft Excel Binary Workbook'
+    },
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.template': {
+      extension: 'xltx',
+      category: 'Spreadsheet',
+      description: 'Microsoft Excel Template'
+    },
+    'application/vnd.ms-excel.template.macroEnabled.12': {
+      extension: 'xltm',
+      category: 'Spreadsheet',
+      description: 'Microsoft Excel Macro-Enabled Template'
+    },
+    'application/vnd.ms-excel.addin.macroEnabled.12': {
+      extension: 'xlam',
+      category: 'Spreadsheet',
+      description: 'Microsoft Excel Add-In'
+    },
+
+    // Microsoft PowerPoint Files
+    'application/vnd.ms-powerpoint': {
+      extension: 'ppt',
+      category: 'Presentation',
+      description: 'Microsoft PowerPoint Presentation (Legacy)'
+    },
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': {
+      extension: 'pptx',
+      category: 'Presentation',
+      description: 'Microsoft PowerPoint Presentation (OpenXML)'
+    },
+    'application/vnd.ms-powerpoint.presentation.macroEnabled.12': {
+      extension: 'pptm',
+      category: 'Presentation',
+      description: 'Microsoft PowerPoint Macro-Enabled Presentation'
+    },
+    'application/vnd.openxmlformats-officedocument.presentationml.template': {
+      extension: 'potx',
+      category: 'Presentation',
+      description: 'Microsoft PowerPoint Template'
+    },
+    'application/vnd.ms-powerpoint.template.macroEnabled.12': {
+      extension: 'potm',
+      category: 'Presentation',
+      description: 'Microsoft PowerPoint Macro-Enabled Template'
+    },
+    'application/vnd.openxmlformats-officedocument.presentationml.slideshow': {
+      extension: 'ppsx',
+      category: 'Presentation',
+      description: 'Microsoft PowerPoint Slideshow'
+    },
+    'application/vnd.ms-powerpoint.slideshow.macroEnabled.12': {
+      extension: 'ppsm',
+      category: 'Presentation',
+      description: 'Microsoft PowerPoint Macro-Enabled Slideshow'
+    },
+
+    // Microsoft Outlook and Email Files
+    'application/vnd.ms-outlook': {
+      extension: 'msg',
+      category: 'Email',
+      description: 'Microsoft Outlook Message'
+    },
+    'message/rfc822': {
+      extension: 'eml',
+      category: 'Email',
+      description: 'Email Message (RFC 822)'
+    },
+    'application/vnd.ms-outlook.item': {
+      extension: 'msg',
+      category: 'Email',
+      description: 'Microsoft Outlook Item'
+    },
+    'application/mbox': {
+      extension: 'mbox',
+      category: 'Email',
+      description: 'MBOX Email Archive'
+    },
+    'application/vnd.ms-outlook.contact': {
+      extension: 'vcf',
+      category: 'Contact',
+      description: 'Outlook Contact (vCard)'
+    },
+    'text/vcard': {
+      extension: 'vcf',
+      category: 'Contact',
+      description: 'vCard Contact File'
+    },
+    'application/vnd.ms-outlook.appointment': {
+      extension: 'vcs',
+      category: 'Calendar',
+      description: 'Outlook Appointment'
+    },
+    'text/calendar': {
+      extension: 'ics',
+      category: 'Calendar',
+      description: 'iCalendar File'
+    },
+    'application/vnd.ms-outlook.task': {
+      extension: 'vcs',
+      category: 'Calendar',
+      description: 'Outlook Task'
+    },
+
+    // Other Document Formats
+    'application/rtf': { extension: 'rtf', category: 'Document', description: 'Rich Text Format' },
+    'application/vnd.oasis.opendocument.text': {
+      extension: 'odt',
+      category: 'Document',
+      description: 'OpenDocument Text Document'
+    },
+    'application/vnd.oasis.opendocument.spreadsheet': {
+      extension: 'ods',
+      category: 'Spreadsheet',
+      description: 'OpenDocument Spreadsheet'
+    },
+    'application/vnd.oasis.opendocument.presentation': {
+      extension: 'odp',
+      category: 'Presentation',
+      description: 'OpenDocument Presentation'
+    },
+    'application/vnd.oasis.opendocument.graphics': {
+      extension: 'odg',
+      category: 'Document',
+      description: 'OpenDocument Graphics'
+    },
+    'application/vnd.oasis.opendocument.formula': {
+      extension: 'odf',
+      category: 'Document',
+      description: 'OpenDocument Formula'
+    }
+  },
+  // Enhanced Text Types
+  text: {
+    // Plain Text Files
+    'text/plain': { extension: 'txt', category: 'Text', description: 'Plain Text File' },
+    'text/tab-separated-values': {
+      extension: 'tsv',
+      category: 'Text',
+      description: 'Tab-Separated Values'
+    },
+    'text/csv': {
+      extension: 'csv',
+      category: 'Spreadsheet',
+      description: 'Comma-Separated Values'
+    },
+
+    // Markup and Web Files
+    'text/html': { extension: 'html', category: 'Text', description: 'HTML Document' },
+    'text/css': { extension: 'css', category: 'Text', description: 'CSS Stylesheet' },
+    'text/javascript': { extension: 'js', category: 'Text', description: 'JavaScript File' },
+    'application/javascript': {
+      extension: 'js',
+      category: 'Text',
+      description: 'JavaScript Application'
+    },
+    'text/xml': { extension: 'xml', category: 'Text', description: 'XML Document' },
+    'application/xml': { extension: 'xml', category: 'Text', description: 'XML Application' },
+
+    // Documentation Files
+    'text/markdown': { extension: 'md', category: 'Text', description: 'Markdown Document' },
+    'text/x-readme': { extension: 'readme', category: 'Text', description: 'README File' },
+
+    // Configuration Files
+    'application/json': { extension: 'json', category: 'Data', description: 'JSON Data File' },
+    'text/yaml': { extension: 'yaml', category: 'Text', description: 'YAML Configuration' },
+    'text/x-yaml': { extension: 'yml', category: 'Text', description: 'YAML Configuration' },
+    'application/x-ini': {
+      extension: 'ini',
+      category: 'Text',
+      description: 'INI Configuration File'
+    },
+
+    // Log Files
+    'text/x-log': { extension: 'log', category: 'Text', description: 'Log File' }
+  },
+  // Image Types
+  image: {
+    'image/jpeg': { extension: 'jpg', category: 'Image', description: 'JPEG Image' },
+    'image/png': { extension: 'png', category: 'Image', description: 'PNG Image' },
+    'image/gif': { extension: 'gif', category: 'Image', description: 'GIF Image' },
+    'image/bmp': { extension: 'bmp', category: 'Image', description: 'BMP Image' },
+    'image/webp': { extension: 'webp', category: 'Image', description: 'WebP Image' },
+    'image/svg+xml': { extension: 'svg', category: 'Image', description: 'SVG Vector Image' },
+    'image/tiff': { extension: 'tiff', category: 'Image', description: 'TIFF Image' },
+    'image/x-icon': { extension: 'ico', category: 'Image', description: 'Icon File' }
+  },
+  // Audio Types
+  audio: {
+    'audio/mpeg': { extension: 'mp3', category: 'Audio', description: 'MP3 Audio' },
+    'audio/wav': { extension: 'wav', category: 'Audio', description: 'WAV Audio' },
+    'audio/ogg': { extension: 'ogg', category: 'Audio', description: 'OGG Audio' },
+    'audio/mp4': { extension: 'm4a', category: 'Audio', description: 'MP4 Audio' },
+    'audio/webm': { extension: 'webm', category: 'Audio', description: 'WebM Audio' },
+    'audio/aac': { extension: 'aac', category: 'Audio', description: 'AAC Audio' }
+  },
+  // Video Types
+  video: {
+    'video/mp4': { extension: 'mp4', category: 'Video', description: 'MP4 Video' },
+    'video/avi': { extension: 'avi', category: 'Video', description: 'AVI Video' },
+    'video/quicktime': { extension: 'mov', category: 'Video', description: 'QuickTime Video' },
+    'video/x-msvideo': { extension: 'avi', category: 'Video', description: 'AVI Video' },
+    'video/webm': { extension: 'webm', category: 'Video', description: 'WebM Video' },
+    'video/ogg': { extension: 'ogv', category: 'Video', description: 'OGG Video' }
+  },
+  // Archive Types
+  archive: {
+    'application/zip': { extension: 'zip', category: 'Archive', description: 'ZIP Archive' },
+    'application/x-rar-compressed': {
+      extension: 'rar',
+      category: 'Archive',
+      description: 'RAR Archive'
+    },
+    'application/x-7z-compressed': {
+      extension: '7z',
+      category: 'Archive',
+      description: '7-Zip Archive'
+    },
+    'application/gzip': { extension: 'gz', category: 'Archive', description: 'GZIP Archive' },
+    'application/x-tar': { extension: 'tar', category: 'Archive', description: 'TAR Archive' }
+  },
+  // Application Types
+  application: {
+    'application/json': { extension: 'json', category: 'Data', description: 'JSON Data' },
+    'application/xml': { extension: 'xml', category: 'Data', description: 'XML Data' },
+    'application/octet-stream': { extension: 'bin', category: 'File', description: 'Binary File' },
+    'application/x-executable': {
+      extension: 'exe',
+      category: 'Executable',
+      description: 'Executable File'
+    },
+    'application/java-archive': {
+      extension: 'jar',
+      category: 'Archive',
+      description: 'Java Archive'
+    }
+  }
+};
+
+// Helper function to get MIME type information
+const getMimeTypeInfo = (mimeType: string) => {
+  for (const category of Object.values(PEGA_SUPPORTED_MIME_TYPES)) {
+    const mimeTypeRecord = category as Record<
+      string,
+      { extension: string; category: string; description: string }
+    >;
+    if (mimeTypeRecord[mimeType]) {
+      return mimeTypeRecord[mimeType];
+    }
+  }
+  return { extension: 'unknown', category: 'File', description: 'Unknown File Type' };
+};
+
+// Helper function to get accept attribute for file input based on categories
+const getAcceptAttribute = (categories: string) => {
+  if (!categories || categories.trim() === '') {
+    return '*/*'; // Accept all files if no categories specified
+  }
+
+  const categoryList = categories.split(',').map(cat => cat.trim().toLowerCase());
+  const acceptTypes: string[] = [];
+
+  categoryList.forEach(category => {
+    switch (category.toLowerCase()) {
+      case 'document':
+        acceptTypes.push(
+          '.pdf',
+          '.doc',
+          '.docx',
+          '.docm',
+          '.dotx',
+          '.dotm',
+          '.rtf',
+          '.odt',
+          '.odg',
+          '.odf'
+        );
+        break;
+      case 'spreadsheet':
+        acceptTypes.push(
+          '.xls',
+          '.xlsx',
+          '.xlsm',
+          '.xlsb',
+          '.xltx',
+          '.xltm',
+          '.xlam',
+          '.csv',
+          '.tsv',
+          '.ods'
+        );
+        break;
+      case 'presentation':
+        acceptTypes.push('.ppt', '.pptx', '.pptm', '.potx', '.potm', '.ppsx', '.ppsm', '.odp');
+        break;
+      case 'image':
+        acceptTypes.push('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.tiff', '.ico');
+        break;
+      case 'audio':
+        acceptTypes.push('.mp3', '.wav', '.ogg', '.m4a', '.aac');
+        break;
+      case 'video':
+        acceptTypes.push('.mp4', '.avi', '.mov', '.webm', '.ogv');
+        break;
+      case 'text':
+        acceptTypes.push(
+          '.txt',
+          '.html',
+          '.css',
+          '.js',
+          '.xml',
+          '.md',
+          '.yaml',
+          '.yml',
+          '.ini',
+          '.log',
+          '.readme',
+          '.tsv'
+        );
+        break;
+      case 'archive':
+        acceptTypes.push('.zip', '.rar', '.7z', '.gz', '.tar');
+        break;
+      case 'email':
+        acceptTypes.push('.msg', '.eml', '.mbox');
+        break;
+      case 'contact':
+        acceptTypes.push('.vcf');
+        break;
+      case 'calendar':
+        acceptTypes.push('.ics', '.vcs');
+        break;
+      case 'data':
+        acceptTypes.push('.json', '.xml', '.yaml', '.yml');
+        break;
+      default:
+        // For custom categories or 'file', accept common file types
+        acceptTypes.push(
+          '.pdf',
+          '.doc',
+          '.docx',
+          '.xlsx',
+          '.pptx',
+          '.txt',
+          '.jpg',
+          '.png',
+          '.msg',
+          '.eml'
+        );
+    }
+  });
+
+  return acceptTypes.length > 0 ? acceptTypes.join(',') : '*/*';
+};
+
+// Helper function to auto-categorize file based on MIME type
+const getFileCategoryFromMimeType = (mimeType: string, availableCategories: string[]): string => {
+  const mimeInfo = getMimeTypeInfo(mimeType);
+  const suggestedCategory = mimeInfo.category;
+
+  // Check if the suggested category is available in the component's categories
+  const availableCategoriesLower = availableCategories.map(cat => cat.toLowerCase());
+  if (availableCategoriesLower.includes(suggestedCategory.toLowerCase())) {
+    return suggestedCategory;
+  }
+
+  // Return the first available category as fallback
+  return availableCategories[0] || 'File';
+};
+
+// Helper function to get file type icon for attachment
+const getFileTypeIcon = (attachment: any) => {
+  const mimeType = attachment.mimeType || attachment.pyTopic || 'application/octet-stream';
+  const fileName = attachment.fileName || attachment.name || '';
+  
+  // Try to get MIME type from file extension if not available
+  const finalMimeType = mimeType === 'application/octet-stream' && fileName 
+    ? getMimeTypeFromFile(fileName) || mimeType 
+    : mimeType;
+    
+  const fileKind = getKindFromMimeType(finalMimeType);
+  
+  return <FileVisual type={fileKind} style={{ width: '24px', height: '24px' }} />;
+};
+
+// Helper function to get file type description
+const getFileTypeDescription = (attachment: any) => {
+  const mimeType = attachment.mimeType || attachment.pyTopic || 'application/octet-stream';
+  const fileName = attachment.fileName || attachment.name || '';
+  
+  // Try to get MIME type from file extension if not available
+  const finalMimeType = mimeType === 'application/octet-stream' && fileName 
+    ? getMimeTypeFromFile(fileName) || mimeType 
+    : mimeType;
+    
+  const mimeInfo = getMimeTypeInfo(finalMimeType);
+  return mimeInfo.description;
+};
+
 export type UtilityListProps = {
   heading: string;
   useAttachmentEndpoint: boolean;
@@ -118,6 +610,12 @@ const UploadModal = ({
       file: File;
       title: string;
       category: string;
+      detectedMimeType?: string;
+      mimeTypeInfo?: {
+        extension: string;
+        category: string;
+        description: string;
+      };
     }>
   >([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -136,11 +634,19 @@ const UploadModal = ({
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
-    const newFiles = Array.from(files).map(file => ({
-      file,
-      title: file.name,
-      category: categoryOptions[0].value
-    }));
+    const availableCategories = categoryOptions.map(opt => opt.value);
+    const newFiles = Array.from(files).map(file => {
+      const mimeType = getMimeTypeFromFile(file.name) || file.type;
+      const autoCategory = getFileCategoryFromMimeType(mimeType, availableCategories);
+
+      return {
+        file,
+        title: file.name,
+        category: autoCategory,
+        detectedMimeType: mimeType,
+        mimeTypeInfo: getMimeTypeInfo(mimeType)
+      };
+    });
 
     setSelectedFiles(prev => [...prev, ...newFiles]);
   };
@@ -241,26 +747,44 @@ const UploadModal = ({
             ref={fileInputRef}
             type='file'
             multiple
-            accept='*/*'
+            accept={getAcceptAttribute(categories)}
             onChange={handleFileSelect}
             style={{ marginTop: '16px' }}
           />
+          <Text variant='secondary' style={{ fontSize: '12px', marginTop: '8px' }}>
+            Supported file types:{' '}
+            {getAcceptAttribute(categories) === '*/*'
+              ? 'All file types'
+              : getAcceptAttribute(categories)}
+          </Text>
         </FieldGroup>
 
         {selectedFiles.length > 0 && (
           <StyledTable theme={theme} style={{ maxHeight: 'calc(80vh - 200px)', overflowY: 'auto' }}>
             <thead>
               <tr>
-                <th style={{ width: '25%' }}>File Name</th>
-                <th style={{ width: '35%' }}>Title</th>
-                <th style={{ width: '30%' }}>Category</th>
+                <th style={{ width: '20%' }}>File Name</th>
+                <th style={{ width: '15%' }}>Type</th>
+                <th style={{ width: '30%' }}>Title</th>
+                <th style={{ width: '25%' }}>Category</th>
                 <th style={{ width: '10%' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {selectedFiles.map((file, index) => (
                 <tr key={file.file.name + index}>
-                  <td>{file.file.name}</td>
+                  <td>
+                    <div style={{ fontSize: '14px' }}>{file.file.name}</div>
+                    <div style={{ fontSize: '12px', color: '#666' }}>
+                      {(file.file.size / 1024).toFixed(1)} KB
+                    </div>
+                  </td>
+                  <td>
+                    <div style={{ fontSize: '12px' }}>
+                      {file.mimeTypeInfo?.description || 'Unknown'}
+                    </div>
+                    <div style={{ fontSize: '10px', color: '#888' }}>{file.detectedMimeType}</div>
+                  </td>
                   <td>
                     <label htmlFor={`title-${index}`} className='sr-only'>
                       Title for {file.file.name}
@@ -359,6 +883,7 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
   const [sortField, setSortField] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [groupBy, setGroupBy] = useState<'none' | 'category' | 'date'>(initialGroupBy);
+  const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const caseID = getPConnect().getValue(
     (window as any).PCore.getConstants().CASE_INFO.CASE_INFO_ID
   );
@@ -367,10 +892,36 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
   const theme = useTheme();
 
   const downloadAll = () => {
-    files?.forEach((attachment: any) => {
-      downloadFile(attachment, getPConnect, undefined, true);
+    const attachmentsToDownload =
+      selectedFiles.size > 0 ? files.filter(attachment => selectedFiles.has(attachment.ID)) : files;
+
+    attachmentsToDownload?.forEach((fileItem: any) => {
+      downloadFile(fileItem, getPConnect, undefined, true);
     });
   };
+
+  const handleFileSelection = (fileId: string, checked: boolean) => {
+    setSelectedFiles(prev => {
+      const newSet = new Set(prev);
+      if (checked) {
+        newSet.add(fileId);
+      } else {
+        newSet.delete(fileId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedFiles(new Set(files.map(file => file.ID)));
+    } else {
+      setSelectedFiles(new Set());
+    }
+  };
+
+  const isAllSelected = files.length > 0 && selectedFiles.size === files.length;
+  const isIndeterminate = selectedFiles.size > 0 && selectedFiles.size < files.length;
 
   const openUploadModal = () => {
     const modalRef = create(UploadModal, {
@@ -528,6 +1079,11 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
     initialLoad();
   }, [categories, useLightBox, useAttachmentEndpoint, enableDownloadAll, initialLoad]);
 
+  // Clear selections when files change
+  useEffect(() => {
+    setSelectedFiles(new Set());
+  }, [files.length]);
+
   const deleteAttachment = useCallback(
     (attachment: any) => {
       const attachmentUtils = (window as any).PCore.getAttachmentUtils();
@@ -545,54 +1101,61 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
     [getPConnect, initialLoad]
   );
 
-  const groupFiles = useCallback((files: Array<any>, groupByField: 'none' | 'category' | 'date') => {
-    if (groupByField === 'none') {
-      return [{ groupName: '', items: files }];
-    }
+  const groupFiles = useCallback(
+    (fileList: Array<any>, groupByField: 'none' | 'category' | 'date') => {
+      if (groupByField === 'none') {
+        return [{ groupName: '', items: fileList }];
+      }
 
-    const groups: { [key: string]: Array<any> } = {};
+      const groups: { [key: string]: Array<any> } = {};
 
-    files.forEach((file) => {
-      let groupKey = '';
-      
-      if (groupByField === 'category') {
-        groupKey = file.category || file.categoryName || 'Uncategorized';
-      } else if (groupByField === 'date') {
-        if (file.createTime) {
-          const date = new Date(file.createTime);
-          groupKey = date.toDateString(); // Format: "Mon Jan 28 2024"
-        } else {
-          groupKey = 'No Date';
+      fileList.forEach(file => {
+        let groupKey = '';
+
+        if (groupByField === 'category') {
+          groupKey = file.category || file.categoryName || 'Uncategorized';
+        } else if (groupByField === 'date') {
+          if (file.createTime) {
+            const date = new Date(file.createTime);
+            groupKey = date.toDateString(); // Format: "Mon Jan 28 2024"
+          } else {
+            groupKey = 'No Date';
+          }
         }
-      }
 
-      if (!groups[groupKey]) {
-        groups[groupKey] = [];
-      }
-      groups[groupKey].push(file);
-    });
+        if (!groups[groupKey]) {
+          groups[groupKey] = [];
+        }
+        groups[groupKey].push(file);
+      });
 
-    // Convert to array and sort group names
-    return Object.keys(groups)
-      .sort()
-      .map(groupName => ({
-        groupName,
-        items: groups[groupName]
-      }));
-  }, []);
+      // Convert to array and sort group names
+      return Object.keys(groups)
+        .sort()
+        .map(groupName => ({
+          groupName,
+          items: groups[groupName]
+        }));
+    },
+    []
+  );
 
   const getHeaderActions = () => {
     const actions = [];
 
     if (enableDownloadAll) {
+      const downloadLabel =
+        selectedFiles.size > 0 ? `Download selected (${selectedFiles.size})` : 'Download all';
+
       actions.push(
         <Button
           key='download-all'
           variant='simple'
-          label={getPConnect().getLocalizedValue('Download all')}
+          label={getPConnect().getLocalizedValue(downloadLabel)}
           icon
           compact
           onClick={downloadAll}
+          disabled={selectedFiles.size === 0 && files.length === 0}
         >
           <Icon name='download' />
         </Button>
@@ -656,9 +1219,50 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
             actions={listActions.length > 0 ? listActions : undefined}
           />
           {!loading && (
-            <Text variant='secondary' style={{ marginTop: '8px', fontSize: '0.875rem' }}>
-              Total: {files.length} {files.length === 1 ? 'attachment' : 'attachments'}
-            </Text>
+            <Flex container={{ direction: 'column', gap: 1, pad: 1 }}>
+              <Text variant='secondary' style={{ marginTop: '8px', fontSize: '0.875rem' }}>
+                Total: {files.length} {files.length === 1 ? 'attachment' : 'attachments'}
+              </Text>
+              {enableDownloadAll && files.length > 0 && (
+                <Flex container={{ direction: 'column', gap: 1 }}>
+                  <Flex container={{ alignItems: 'center', gap: 1 }}>
+                    <input
+                      id='list-select-all'
+                      type='checkbox'
+                      checked={isAllSelected}
+                      ref={input => {
+                        if (input) input.indeterminate = isIndeterminate;
+                      }}
+                      onChange={e => handleSelectAll(e.target.checked)}
+                      style={{ marginRight: '8px' }}
+                      aria-label='Select all attachments'
+                    />
+                    <label htmlFor='list-select-all'>
+                      <Text variant='secondary' style={{ fontSize: '0.875rem' }}>
+                        {selectedFiles.size > 0 ? `${selectedFiles.size} selected` : 'Select all'}
+                      </Text>
+                    </label>
+                  </Flex>
+                  {files.slice(0, 3).map((file: any) => (
+                    <Flex key={file.ID} container={{ alignItems: 'center', gap: 1 }}>
+                      <input
+                        id={`list-select-${file.ID}`}
+                        type='checkbox'
+                        checked={selectedFiles.has(file.ID)}
+                        onChange={e => handleFileSelection(file.ID, e.target.checked)}
+                        style={{ marginRight: '8px' }}
+                        aria-label={`Select ${file.fileName || file.name || 'unnamed file'}`}
+                      />
+                      <label htmlFor={`list-select-${file.ID}`}>
+                        <Text variant='secondary' style={{ fontSize: '0.875rem' }}>
+                          {file.fileName || file.name || 'Unnamed file'}
+                        </Text>
+                      </label>
+                    </Flex>
+                  ))}
+                </Flex>
+              )}
+            </Flex>
           )}
         </Flex>
       );
@@ -671,7 +1275,7 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
         }
 
         const getValue = (item: any, field: string): string => {
-          switch(field) {
+          switch (field) {
             case 'fileName':
               return item.fileName || item.name || '';
             case 'title':
@@ -689,8 +1293,8 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
 
         const aValue = getValue(a, sortField);
         const bValue = getValue(b, sortField);
-        
-        return sortDirection === 'asc' 
+
+        return sortDirection === 'asc'
           ? aValue.toString().localeCompare(bValue.toString())
           : bValue.toString().localeCompare(aValue.toString());
       });
@@ -703,12 +1307,15 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
             <Text variant='h2'>{heading}</Text>
           </CardHeader>
           <CardContent>
-            <Flex container={{ justify: 'between', align: 'center', gap: 2 }} style={{ marginBottom: '16px' }}>
-              <Flex container={{ gap: 2, align: 'center' }}>
+            <Flex
+              container={{ justify: 'between', alignItems: 'center', gap: 2 }}
+              style={{ marginBottom: '16px' }}
+            >
+              <Flex container={{ gap: 2, alignItems: 'center' }}>
                 <Text variant='secondary'>Group by:</Text>
                 <select
                   value={groupBy}
-                  onChange={(e) => setGroupBy(e.target.value as 'none' | 'category' | 'date')}
+                  onChange={e => setGroupBy(e.target.value as 'none' | 'category' | 'date')}
                   style={{
                     padding: '8px 12px',
                     border: '1px solid #ccc',
@@ -721,69 +1328,131 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
                   <option value='date'>Date</option>
                 </select>
               </Flex>
-              <Text variant='secondary' style={{ fontWeight: '500' }}>
-                Total: {files.length} {files.length === 1 ? 'attachment' : 'attachments'}
-              </Text>
+              <Flex container={{ gap: 2, alignItems: 'center' }}>
+                {selectedFiles.size > 0 && (
+                  <Text variant='secondary' style={{ fontWeight: '500' }}>
+                    {selectedFiles.size} selected
+                  </Text>
+                )}
+                <Text variant='secondary' style={{ fontWeight: '500' }}>
+                  Total: {files.length} {files.length === 1 ? 'attachment' : 'attachments'}
+                </Text>
+              </Flex>
             </Flex>
             {attachments?.length > 0 ? (
               <div>
-                {groupedFiles.map((group, groupIndex) => (
-                  <div key={group.groupName || 'default'} style={{ marginBottom: groupBy !== 'none' ? '24px' : '0' }}>
+                {groupedFiles.map(group => (
+                  <div
+                    key={group.groupName || 'default'}
+                    style={{ marginBottom: groupBy !== 'none' ? '24px' : '0' }}
+                  >
                     {groupBy !== 'none' && (
-                      <Text 
-                        variant='h4' 
-                        style={{ 
+                      <Text
+                        variant='h4'
+                        style={{
                           marginBottom: '12px',
                           paddingBottom: '8px',
                           borderBottom: '2px solid #e0e0e0',
                           color: '#333'
                         }}
                       >
-                        {group.groupName} ({group.items.length} {group.items.length === 1 ? 'item' : 'items'})
+                        {group.groupName} ({group.items.length}{' '}
+                        {group.items.length === 1 ? 'item' : 'items'})
                       </Text>
                     )}
                     <StyledTable theme={theme}>
                       <thead>
                         <tr>
-                          <th onClick={() => {
-                            const newField = 'fileName';
-                            const newDirection = sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
-                            setSortField(newField);
-                            setSortDirection(newDirection);
-                          }} style={{ cursor: 'pointer' }}>
-                            File Name {sortField === 'fileName' && <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />}
+                          {enableDownloadAll && (
+                            <th style={{ width: '50px' }}>
+                              <input
+                                id='select-all-checkbox'
+                                type='checkbox'
+                                checked={isAllSelected}
+                                ref={input => {
+                                  if (input) input.indeterminate = isIndeterminate;
+                                }}
+                                onChange={e => handleSelectAll(e.target.checked)}
+                                style={{ margin: '0' }}
+                                aria-label='Select all attachments'
+                              />
+                            </th>
+                          )}
+                          <th style={{ width: '60px' }}>Type</th>
+                          <th
+                            onClick={() => {
+                              const newField = 'fileName';
+                              const newDirection =
+                                sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
+                              setSortField(newField);
+                              setSortDirection(newDirection);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            File Name{' '}
+                            {sortField === 'fileName' && (
+                              <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />
+                            )}
                           </th>
-                          <th onClick={() => {
-                            const newField = 'title';
-                            const newDirection = sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
-                            setSortField(newField);
-                            setSortDirection(newDirection);
-                          }} style={{ cursor: 'pointer' }}>
-                            Title {sortField === 'title' && <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />}
+                          <th
+                            onClick={() => {
+                              const newField = 'title';
+                              const newDirection =
+                                sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
+                              setSortField(newField);
+                              setSortDirection(newDirection);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            Title{' '}
+                            {sortField === 'title' && (
+                              <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />
+                            )}
                           </th>
-                          <th onClick={() => {
-                            const newField = 'category';
-                            const newDirection = sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
-                            setSortField(newField);
-                            setSortDirection(newDirection);
-                          }} style={{ cursor: 'pointer' }}>
-                            Category {sortField === 'category' && <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />}
+                          <th
+                            onClick={() => {
+                              const newField = 'category';
+                              const newDirection =
+                                sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
+                              setSortField(newField);
+                              setSortDirection(newDirection);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            Category{' '}
+                            {sortField === 'category' && (
+                              <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />
+                            )}
                           </th>
-                          <th onClick={() => {
-                            const newField = 'createdBy';
-                            const newDirection = sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
-                            setSortField(newField);
-                            setSortDirection(newDirection);
-                          }} style={{ cursor: 'pointer' }}>
-                            Uploaded By {sortField === 'createdBy' && <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />}
+                          <th
+                            onClick={() => {
+                              const newField = 'createdBy';
+                              const newDirection =
+                                sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
+                              setSortField(newField);
+                              setSortDirection(newDirection);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            Uploaded By{' '}
+                            {sortField === 'createdBy' && (
+                              <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />
+                            )}
                           </th>
-                          <th onClick={() => {
-                            const newField = 'createTime';
-                            const newDirection = sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
-                            setSortField(newField);
-                            setSortDirection(newDirection);
-                          }} style={{ cursor: 'pointer' }}>
-                            Date Time {sortField === 'createTime' && <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />}
+                          <th
+                            onClick={() => {
+                              const newField = 'createTime';
+                              const newDirection =
+                                sortField === newField && sortDirection === 'asc' ? 'desc' : 'asc';
+                              setSortField(newField);
+                              setSortDirection(newDirection);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            Date Time{' '}
+                            {sortField === 'createTime' && (
+                              <Icon name={sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'} />
+                            )}
                           </th>
                           <th>Download</th>
                           <th>Options</th>
@@ -792,8 +1461,58 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
                       <tbody>
                         {group.items.map((attachment: any) => (
                           <tr key={attachment.ID}>
-                            <td>{attachment.fileName || attachment.name || '-'}</td>
-                            <td>{attachment.title || attachment.pyMemo || attachment.fileName || '-'}</td>
+                            {enableDownloadAll && (
+                              <td>
+                                <input
+                                  id={`select-${attachment.ID}`}
+                                  type='checkbox'
+                                  checked={selectedFiles.has(attachment.ID)}
+                                  onChange={e =>
+                                    handleFileSelection(attachment.ID, e.target.checked)
+                                  }
+                                  style={{ margin: '0' }}
+                                  aria-label={`Select ${attachment.fileName || attachment.name || 'attachment'}`}
+                                />
+                              </td>
+                            )}
+                            <td style={{ textAlign: 'center', padding: '8px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {getFileTypeIcon(attachment)}
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <button
+                                  type="button"
+                                  onClick={() => downloadFile(attachment, getPConnect, undefined, false)}
+                                  style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#0066cc',
+                                    textDecoration: 'underline',
+                                    cursor: 'pointer',
+                                    padding: '0',
+                                    font: 'inherit',
+                                    fontWeight: '500',
+                                    fontSize: '14px'
+                                  }}
+                                  onMouseOver={(e) => {
+                                    e.currentTarget.style.color = '#004499';
+                                    e.currentTarget.style.textDecoration = 'none';
+                                  }}
+                                  onMouseOut={(e) => {
+                                    e.currentTarget.style.color = '#0066cc';
+                                    e.currentTarget.style.textDecoration = 'underline';
+                                  }}
+                                  title={`Download ${attachment.fileName || attachment.name || 'attachment'}`}
+                                >
+                                  {attachment.fileName || attachment.name || '-'}
+                                </button>
+                              </div>
+                            </td>
+                            <td>
+                              {attachment.title || attachment.pyMemo || attachment.fileName || '-'}
+                            </td>
                             <td>{attachment.category || attachment.categoryName || '-'}</td>
                             <td>{attachment.createdByName || attachment.createdBy || '-'}</td>
                             <td>
@@ -807,7 +1526,9 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
                                 label={getPConnect().getLocalizedValue('Download')}
                                 icon
                                 compact
-                                onClick={() => downloadFile(attachment, getPConnect, undefined, false)}
+                                onClick={() =>
+                                  downloadFile(attachment, getPConnect, undefined, false)
+                                }
                               >
                                 <Icon name='download' />
                               </Button>
@@ -842,14 +1563,44 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
     return (
       <Flex container={{ direction: 'column' }}>
         <CardHeader actions={getHeaderActions()}>
-          <Flex container={{ justify: 'between', align: 'center', gap: 2 }}>
+          <Flex container={{ justify: 'between', alignItems: 'center', gap: 2 }}>
             <Text variant='h2'>{heading}</Text>
-            <Text variant='secondary' style={{ fontWeight: '500' }}>
-              Total: {files.length} {files.length === 1 ? 'attachment' : 'attachments'}
-            </Text>
+            <Flex container={{ gap: 2, alignItems: 'center' }}>
+              {selectedFiles.size > 0 && (
+                <Text variant='secondary' style={{ fontWeight: '500' }}>
+                  {selectedFiles.size} selected
+                </Text>
+              )}
+              <Text variant='secondary' style={{ fontWeight: '500' }}>
+                Total: {files.length} {files.length === 1 ? 'attachment' : 'attachments'}
+              </Text>
+            </Flex>
           </Flex>
         </CardHeader>
         <CardContent>
+          {enableDownloadAll && files.length > 0 && (
+            <Flex
+              container={{ alignItems: 'center', gap: 1, pad: 1 }}
+              style={{ marginBottom: '16px' }}
+            >
+              <input
+                id='tiles-select-all'
+                type='checkbox'
+                checked={isAllSelected}
+                ref={input => {
+                  if (input) input.indeterminate = isIndeterminate;
+                }}
+                onChange={e => handleSelectAll(e.target.checked)}
+                style={{ marginRight: '8px' }}
+                aria-label='Select all attachments'
+              />
+              <label htmlFor='tiles-select-all'>
+                <Text variant='secondary' style={{ fontSize: '0.875rem' }}>
+                  {selectedFiles.size > 0 ? `${selectedFiles.size} selected` : 'Select all'}
+                </Text>
+              </label>
+            </Flex>
+          )}
           {attachments?.length > 0 ? (
             <Grid
               container={{ pad: 0, gap: 1 }}
@@ -859,10 +1610,24 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
               sm={{ container: { cols: 'repeat(2, 1fr)', rows: 'repeat(1, 1fr)' } }}
               xs={{ container: { cols: 'repeat(1, 1fr)', rows: 'repeat(1, 1fr)' } }}
             >
-              {attachments.map((attachment: any) => (
-                <StyledCardContent key={attachment.ID} theme={theme}>
-                  <SummaryItem {...attachment} />
-                </StyledCardContent>
+              {attachments.map((attachment: any, index: number) => (
+                <div key={attachment.ID} style={{ position: 'relative' }}>
+                  {enableDownloadAll && (
+                    <div style={{ position: 'absolute', top: '8px', left: '8px', zIndex: 10 }}>
+                      <input
+                        id={`tile-select-${files[index]?.ID}`}
+                        type='checkbox'
+                        checked={selectedFiles.has(files[index]?.ID)}
+                        onChange={e => handleFileSelection(files[index]?.ID, e.target.checked)}
+                        style={{ margin: '0' }}
+                        aria-label={`Select ${files[index]?.fileName || files[index]?.name || 'attachment'}`}
+                      />
+                    </div>
+                  )}
+                  <StyledCardContent theme={theme}>
+                    <SummaryItem {...attachment} />
+                  </StyledCardContent>
+                </div>
               ))}
             </Grid>
           ) : (
