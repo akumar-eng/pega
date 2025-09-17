@@ -618,10 +618,10 @@ const getDetailedFileExtensions = (categories: string) => {
   categoryList.forEach(category => {
     switch (category.toLowerCase()) {
       case 'document':
-        extensionsByCategory['Documents'] = ['.pdf', '.doc', '.docx', '.dotx', '.rtf', '.odt'];
+        extensionsByCategory.Documents = ['.pdf', '.doc', '.docx', '.dotx', '.rtf', '.odt'];
         break;
       case 'spreadsheet':
-        extensionsByCategory['Spreadsheets'] = [
+        extensionsByCategory.Spreadsheets = [
           '.xls',
           '.xlsx',
           '.xlsm',
@@ -632,7 +632,7 @@ const getDetailedFileExtensions = (categories: string) => {
         ];
         break;
       case 'presentation':
-        extensionsByCategory['Presentations'] = [
+        extensionsByCategory.Presentations = [
           '.ppt',
           '.pptx',
           '.pptm',
@@ -642,7 +642,7 @@ const getDetailedFileExtensions = (categories: string) => {
         ];
         break;
       case 'image':
-        extensionsByCategory['Images'] = [
+        extensionsByCategory.Images = [
           '.jpg',
           '.jpeg',
           '.png',
@@ -654,28 +654,31 @@ const getDetailedFileExtensions = (categories: string) => {
         ];
         break;
       case 'audio':
-        extensionsByCategory['Audio'] = ['.mp3', '.wav', '.ogg', '.m4a', '.aac'];
+        extensionsByCategory.Audio = ['.mp3', '.wav', '.ogg', '.m4a', '.aac'];
         break;
       case 'video':
-        extensionsByCategory['Video'] = ['.mp4', '.avi', '.mov', '.webm', '.ogv'];
+        extensionsByCategory.Video = ['.mp4', '.avi', '.mov', '.webm', '.ogv'];
         break;
       case 'text':
-        extensionsByCategory['Text'] = ['.txt', '.html', '.css', '.js', '.md', '.ini', '.log'];
+        extensionsByCategory.Text = ['.txt', '.html', '.css', '.js', '.md', '.ini', '.log'];
         break;
       case 'archive':
-        extensionsByCategory['Archives'] = ['.zip', '.rar', '.7z', '.gz', '.tar'];
+        extensionsByCategory.Archives = ['.zip', '.rar', '.7z', '.gz', '.tar'];
         break;
       case 'email':
-        extensionsByCategory['Email'] = ['.msg', '.eml', '.mbox'];
+        extensionsByCategory.Email = ['.msg', '.eml', '.mbox'];
         break;
       case 'contact':
-        extensionsByCategory['Contacts'] = ['.vcf'];
+        extensionsByCategory.Contacts = ['.vcf'];
         break;
       case 'calendar':
-        extensionsByCategory['Calendar'] = ['.ics', '.vcs'];
+        extensionsByCategory.Calendar = ['.ics', '.vcs'];
         break;
       case 'data':
-        extensionsByCategory['Data'] = ['.json', '.xml', '.yaml', '.yml', '.csv', '.tsv'];
+        extensionsByCategory.Data = ['.json', '.xml', '.yaml', '.yml', '.csv', '.tsv'];
+        break;
+      default:
+        // Handle unknown categories gracefully - no extensions added
         break;
     }
   });
@@ -704,8 +707,8 @@ const getDetailedFileExtensions = (categories: string) => {
       }
 
       // For extensions that appear in multiple categories, prioritize based on primary use
-      const categories = extensionCategoryMap[ext];
-      if (categories.length > 1) {
+      const categoryEntries = extensionCategoryMap[ext];
+      if (categoryEntries.length > 1) {
         // Priority logic for shared extensions
         if (ext === '.csv' || ext === '.tsv') {
           return categoryName === 'Spreadsheets'; // CSV/TSV primarily spreadsheet formats
