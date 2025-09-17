@@ -415,3 +415,16 @@ export const EmailAndCommunication: Story = DisplayAttachmentsDemo({
   iconName: 'clipboard',
   groupBy: 'category'
 });
+
+export const EnhancedFileSupport: Story = DisplayAttachmentsDemo({
+  heading: 'Display attachments - Enhanced File Type Support',
+  categories: 'Document,Spreadsheet,Image,Archive,Data',
+  useLightBox: false,
+  useAttachmentEndpoint: true,
+  enableDownloadAll: true,
+  enableUpload: true,
+  dataPage: 'D_AttachmentListRO',
+  displayFormat: 'table',
+  iconName: 'clipboard',
+  groupBy: 'category'
+});

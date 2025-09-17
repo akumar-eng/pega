@@ -312,6 +312,11 @@ const PEGA_SUPPORTED_MIME_TYPES = {
       category: 'Spreadsheet',
       description: 'Comma-Separated Values'
     },
+    'application/csv': {
+      extension: 'csv',
+      category: 'Spreadsheet',
+      description: 'Comma-Separated Values'
+    },
 
     // Markup and Web Files
     'text/html': { extension: 'html', category: 'Text', description: 'HTML Document' },
@@ -345,12 +350,14 @@ const PEGA_SUPPORTED_MIME_TYPES = {
   // Image Types
   image: {
     'image/jpeg': { extension: 'jpg', category: 'Image', description: 'JPEG Image' },
+    'image/jpg': { extension: 'jpg', category: 'Image', description: 'JPEG Image' },
     'image/png': { extension: 'png', category: 'Image', description: 'PNG Image' },
     'image/gif': { extension: 'gif', category: 'Image', description: 'GIF Image' },
     'image/bmp': { extension: 'bmp', category: 'Image', description: 'BMP Image' },
     'image/webp': { extension: 'webp', category: 'Image', description: 'WebP Image' },
     'image/svg+xml': { extension: 'svg', category: 'Image', description: 'SVG Vector Image' },
     'image/tiff': { extension: 'tiff', category: 'Image', description: 'TIFF Image' },
+    'image/tif': { extension: 'tif', category: 'Image', description: 'TIFF Image' },
     'image/x-icon': { extension: 'ico', category: 'Image', description: 'Icon File' }
   },
   // Audio Types
@@ -462,7 +469,18 @@ const getAcceptAttribute = (categories: string) => {
         acceptTypes.push('.ppt', '.pptx', '.pptm', '.potx', '.potm', '.ppsx', '.ppsm', '.odp');
         break;
       case 'image':
-        acceptTypes.push('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.tiff', '.ico');
+        acceptTypes.push(
+          '.jpg',
+          '.jpeg',
+          '.png',
+          '.gif',
+          '.bmp',
+          '.webp',
+          '.svg',
+          '.tiff',
+          '.tif',
+          '.ico'
+        );
         break;
       case 'audio':
         acceptTypes.push('.mp3', '.wav', '.ogg', '.m4a', '.aac');
@@ -499,19 +517,31 @@ const getAcceptAttribute = (categories: string) => {
         acceptTypes.push('.ics', '.vcs');
         break;
       case 'data':
-        acceptTypes.push('.json', '.xml', '.yaml', '.yml');
+        acceptTypes.push('.json', '.xml', '.yaml', '.yml', '.csv', '.tsv');
         break;
       default:
-        // For custom categories or 'file', accept common file types
+        // For custom categories or 'file', accept common file types including all requested extensions
         acceptTypes.push(
           '.pdf',
           '.doc',
           '.docx',
+          '.dotx',
+          '.xls',
           '.xlsx',
+          '.csv',
           '.pptx',
+          '.potx',
           '.txt',
+          '.xml',
           '.jpg',
+          '.jpeg',
           '.png',
+          '.gif',
+          '.bmp',
+          '.svg',
+          '.tiff',
+          '.tif',
+          '.zip',
           '.msg',
           '.eml'
         );
@@ -519,6 +549,182 @@ const getAcceptAttribute = (categories: string) => {
   });
 
   return acceptTypes.length > 0 ? acceptTypes.join(',') : '*/*';
+};
+
+// Helper function to get user-friendly description of supported file types
+const getSupportedFileTypesDescription = (categories: string) => {
+  if (!categories || categories.trim() === '') {
+    return 'All file types are supported';
+  }
+
+  const categoryList = categories.split(',').map(cat => cat.trim().toLowerCase());
+  const supportedTypes: string[] = [];
+
+  categoryList.forEach(category => {
+    switch (category.toLowerCase()) {
+      case 'document':
+        supportedTypes.push('Documents (PDF, Word, RTF, OpenDocument)');
+        break;
+      case 'spreadsheet':
+        supportedTypes.push('Spreadsheets (Excel, CSV, OpenDocument)');
+        break;
+      case 'presentation':
+        supportedTypes.push('Presentations (PowerPoint, OpenDocument)');
+        break;
+      case 'image':
+        supportedTypes.push('Images (JPEG, PNG, GIF, BMP, SVG, TIFF)');
+        break;
+      case 'audio':
+        supportedTypes.push('Audio (MP3, WAV, OGG, AAC)');
+        break;
+      case 'video':
+        supportedTypes.push('Video (MP4, AVI, MOV, WebM)');
+        break;
+      case 'text':
+        supportedTypes.push('Text Files (TXT, HTML, CSS, JS, XML, Markdown)');
+        break;
+      case 'archive':
+        supportedTypes.push('Archives (ZIP, RAR, 7Z, GZIP, TAR)');
+        break;
+      case 'email':
+        supportedTypes.push('Email Files (MSG, EML, MBOX)');
+        break;
+      case 'contact':
+        supportedTypes.push('Contact Files (VCF)');
+        break;
+      case 'calendar':
+        supportedTypes.push('Calendar Files (ICS, VCS)');
+        break;
+      case 'data':
+        supportedTypes.push('Data Files (JSON, XML, YAML, CSV)');
+        break;
+      default:
+        supportedTypes.push('Common File Types (Office, Images, Text, Email)');
+    }
+  });
+
+  return supportedTypes.join(', ');
+};
+
+// Helper function to get detailed file extensions list
+const getDetailedFileExtensions = (categories: string) => {
+  if (!categories || categories.trim() === '') {
+    return 'All file extensions are accepted';
+  }
+
+  const categoryList = categories.split(',').map(cat => cat.trim().toLowerCase());
+  const extensionsByCategory: { [key: string]: string[] } = {};
+
+  categoryList.forEach(category => {
+    switch (category.toLowerCase()) {
+      case 'document':
+        extensionsByCategory['Documents'] = ['.pdf', '.doc', '.docx', '.dotx', '.rtf', '.odt'];
+        break;
+      case 'spreadsheet':
+        extensionsByCategory['Spreadsheets'] = [
+          '.xls',
+          '.xlsx',
+          '.xlsm',
+          '.xltx',
+          '.csv',
+          '.tsv',
+          '.ods'
+        ];
+        break;
+      case 'presentation':
+        extensionsByCategory['Presentations'] = [
+          '.ppt',
+          '.pptx',
+          '.pptm',
+          '.potx',
+          '.ppsx',
+          '.odp'
+        ];
+        break;
+      case 'image':
+        extensionsByCategory['Images'] = [
+          '.jpg',
+          '.jpeg',
+          '.png',
+          '.gif',
+          '.bmp',
+          '.svg',
+          '.tiff',
+          '.tif'
+        ];
+        break;
+      case 'audio':
+        extensionsByCategory['Audio'] = ['.mp3', '.wav', '.ogg', '.m4a', '.aac'];
+        break;
+      case 'video':
+        extensionsByCategory['Video'] = ['.mp4', '.avi', '.mov', '.webm', '.ogv'];
+        break;
+      case 'text':
+        extensionsByCategory['Text'] = ['.txt', '.html', '.css', '.js', '.md', '.ini', '.log'];
+        break;
+      case 'archive':
+        extensionsByCategory['Archives'] = ['.zip', '.rar', '.7z', '.gz', '.tar'];
+        break;
+      case 'email':
+        extensionsByCategory['Email'] = ['.msg', '.eml', '.mbox'];
+        break;
+      case 'contact':
+        extensionsByCategory['Contacts'] = ['.vcf'];
+        break;
+      case 'calendar':
+        extensionsByCategory['Calendar'] = ['.ics', '.vcs'];
+        break;
+      case 'data':
+        extensionsByCategory['Data'] = ['.json', '.xml', '.yaml', '.yml', '.csv', '.tsv'];
+        break;
+    }
+  });
+
+  // Remove duplicate extensions across categories
+  const allExtensions = new Set<string>();
+  const finalExtensionsByCategory: { [key: string]: string[] } = {};
+
+  // First pass: collect all extensions and identify duplicates
+  const extensionCategoryMap: { [extension: string]: string[] } = {};
+
+  Object.entries(extensionsByCategory).forEach(([categoryName, extensions]) => {
+    extensions.forEach(ext => {
+      if (!extensionCategoryMap[ext]) {
+        extensionCategoryMap[ext] = [];
+      }
+      extensionCategoryMap[ext].push(categoryName);
+    });
+  });
+
+  // Second pass: assign extensions to most appropriate category, avoiding duplicates
+  Object.entries(extensionsByCategory).forEach(([categoryName, extensions]) => {
+    const uniqueExtensions = extensions.filter(ext => {
+      if (allExtensions.has(ext)) {
+        return false; // Skip if already added
+      }
+
+      // For extensions that appear in multiple categories, prioritize based on primary use
+      const categories = extensionCategoryMap[ext];
+      if (categories.length > 1) {
+        // Priority logic for shared extensions
+        if (ext === '.csv' || ext === '.tsv') {
+          return categoryName === 'Spreadsheets'; // CSV/TSV primarily spreadsheet formats
+        }
+        if (ext === '.xml' || ext === '.yaml' || ext === '.yml') {
+          return categoryName === 'Data'; // XML/YAML primarily data formats
+        }
+      }
+
+      allExtensions.add(ext);
+      return true;
+    });
+
+    if (uniqueExtensions.length > 0) {
+      finalExtensionsByCategory[categoryName] = uniqueExtensions;
+    }
+  });
+
+  return finalExtensionsByCategory;
 };
 
 // Helper function to auto-categorize file based on MIME type
@@ -540,29 +746,16 @@ const getFileCategoryFromMimeType = (mimeType: string, availableCategories: stri
 const getFileTypeIcon = (attachment: any) => {
   const mimeType = attachment.mimeType || attachment.pyTopic || 'application/octet-stream';
   const fileName = attachment.fileName || attachment.name || '';
-  
-  // Try to get MIME type from file extension if not available
-  const finalMimeType = mimeType === 'application/octet-stream' && fileName 
-    ? getMimeTypeFromFile(fileName) || mimeType 
-    : mimeType;
-    
-  const fileKind = getKindFromMimeType(finalMimeType);
-  
-  return <FileVisual type={fileKind} style={{ width: '24px', height: '24px' }} />;
-};
 
-// Helper function to get file type description
-const getFileTypeDescription = (attachment: any) => {
-  const mimeType = attachment.mimeType || attachment.pyTopic || 'application/octet-stream';
-  const fileName = attachment.fileName || attachment.name || '';
-  
   // Try to get MIME type from file extension if not available
-  const finalMimeType = mimeType === 'application/octet-stream' && fileName 
-    ? getMimeTypeFromFile(fileName) || mimeType 
-    : mimeType;
-    
-  const mimeInfo = getMimeTypeInfo(finalMimeType);
-  return mimeInfo.description;
+  const finalMimeType =
+    mimeType === 'application/octet-stream' && fileName
+      ? getMimeTypeFromFile(fileName) || mimeType
+      : mimeType;
+
+  const fileKind = getKindFromMimeType(finalMimeType);
+
+  return <FileVisual type={fileKind} style={{ width: '24px', height: '24px' }} />;
 };
 
 export type UtilityListProps = {
@@ -742,7 +935,7 @@ const UploadModal = ({
       }}
     >
       <Flex container={{ direction: 'column', gap: 2, pad: 2 }}>
-        <FieldGroup name='upload-form'>
+        <FieldGroup>
           <input
             ref={fileInputRef}
             type='file'
@@ -751,12 +944,35 @@ const UploadModal = ({
             onChange={handleFileSelect}
             style={{ marginTop: '16px' }}
           />
-          <Text variant='secondary' style={{ fontSize: '12px', marginTop: '8px' }}>
-            Supported file types:{' '}
-            {getAcceptAttribute(categories) === '*/*'
-              ? 'All file types'
-              : getAcceptAttribute(categories)}
-          </Text>
+          <Flex container={{ direction: 'column', gap: 1 }} style={{ marginTop: '12px' }}>
+            <Text variant='secondary' style={{ fontSize: '14px', fontWeight: '500' }}>
+              Supported File Types:
+            </Text>
+            <Text variant='secondary' style={{ fontSize: '12px', lineHeight: '1.4' }}>
+              {getSupportedFileTypesDescription(categories)}
+            </Text>
+            {categories && categories.trim() !== '' && (
+              <div style={{ marginTop: '8px' }}>
+                <Text
+                  variant='secondary'
+                  style={{ fontSize: '11px', fontWeight: '500', marginBottom: '4px' }}
+                >
+                  Accepted Extensions:
+                </Text>
+                <div style={{ maxHeight: '100px', overflowY: 'auto' }}>
+                  {Object.entries(getDetailedFileExtensions(categories)).map(
+                    ([categoryName, extensions]) => (
+                      <div key={categoryName} style={{ marginBottom: '4px' }}>
+                        <Text variant='secondary' style={{ fontSize: '10px', color: '#666' }}>
+                          <strong>{categoryName}:</strong> {extensions.join(', ')}
+                        </Text>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </Flex>
         </FieldGroup>
 
         {selectedFiles.length > 0 && (
@@ -1476,15 +1692,23 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
                               </td>
                             )}
                             <td style={{ textAlign: 'center', padding: '8px' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center'
+                                }}
+                              >
                                 {getFileTypeIcon(attachment)}
                               </div>
                             </td>
                             <td>
                               <div>
                                 <button
-                                  type="button"
-                                  onClick={() => downloadFile(attachment, getPConnect, undefined, false)}
+                                  type='button'
+                                  onClick={() =>
+                                    downloadFile(attachment, getPConnect, undefined, false)
+                                  }
                                   style={{
                                     background: 'none',
                                     border: 'none',
@@ -1496,11 +1720,19 @@ export const LHCExtensionsDisplayAttachments = (props: UtilityListProps) => {
                                     fontWeight: '500',
                                     fontSize: '14px'
                                   }}
-                                  onMouseOver={(e) => {
+                                  onMouseOver={e => {
                                     e.currentTarget.style.color = '#004499';
                                     e.currentTarget.style.textDecoration = 'none';
                                   }}
-                                  onMouseOut={(e) => {
+                                  onMouseOut={e => {
+                                    e.currentTarget.style.color = '#0066cc';
+                                    e.currentTarget.style.textDecoration = 'underline';
+                                  }}
+                                  onFocus={e => {
+                                    e.currentTarget.style.color = '#004499';
+                                    e.currentTarget.style.textDecoration = 'none';
+                                  }}
+                                  onBlur={e => {
                                     e.currentTarget.style.color = '#0066cc';
                                     e.currentTarget.style.textDecoration = 'underline';
                                   }}

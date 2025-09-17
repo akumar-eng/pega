@@ -1,0 +1,217 @@
+===============================================================================
+LHC EXTENSIONS DISPLAY ATTACHMENTS - UPLOAD UI TEXT EXAMPLES
+===============================================================================
+
+This document shows exactly what users will see when they click the "Upload" 
+button in the LHC_Extensions_DisplayAttachments component, based on different
+category configurations.
+
+===============================================================================
+EXAMPLE 1: Categories = "Document,Image,Spreadsheet"
+===============================================================================
+
+Modal Header: Upload Attachments
+
+Supported File Types:
+Documents (PDF, Word, RTF, OpenDocument), Images (JPEG, PNG, GIF, BMP, SVG, TIFF), Spreadsheets (Excel, CSV, OpenDocument)
+
+Accepted Extensions:
+Documents: .pdf, .doc, .docx, .dotx, .rtf, .odt
+Images: .jpg, .jpeg, .png, .gif, .bmp, .svg, .tiff, .tif
+Spreadsheets: .xls, .xlsx, .xlsm, .xltx, .csv, .tsv, .ods
+
+===============================================================================
+EXAMPLE 2: Categories = "Document,Spreadsheet,Presentation,Image,Audio,Video,Archive,Text,Data,Email,Contact,Calendar"
+===============================================================================
+
+Modal Header: Upload Attachments
+
+Supported File Types:
+Documents (PDF, Word, RTF, OpenDocument), Spreadsheets (Excel, CSV, OpenDocument), Presentations (PowerPoint, OpenDocument), Images (JPEG, PNG, GIF, BMP, SVG, TIFF), Audio (MP3, WAV, OGG, AAC), Video (MP4, AVI, MOV, WebM), Archives (ZIP, RAR, 7Z, GZIP, TAR), Text Files (TXT, HTML, CSS, JS, XML, Markdown), Data Files (JSON, XML, YAML, CSV), Email Files (MSG, EML, MBOX), Contact Files (VCF), Calendar Files (ICS, VCS)
+
+Accepted Extensions:
+Documents: .pdf, .doc, .docx, .dotx, .rtf, .odt
+Presentations: .ppt, .pptx, .pptm, .potx, .ppsx, .odp
+Images: .jpg, .jpeg, .png, .gif, .bmp, .svg, .tiff, .tif
+Audio: .mp3, .wav, .ogg, .m4a, .aac
+Video: .mp4, .avi, .mov, .webm, .ogv
+Text: .txt, .html, .css, .js, .md, .ini, .log
+Archives: .zip, .rar, .7z, .gz, .tar
+Email: .msg, .eml, .mbox
+Contacts: .vcf
+Calendar: .ics, .vcs
+Data: .json, .xml, .yaml, .yml, .csv, .tsv
+
+Note: Spreadsheets category may show no unique extensions after deduplication
+      as .csv and .tsv are prioritized under Data category.
+
+===============================================================================
+EXAMPLE 3: Categories = "Image,Archive"
+===============================================================================
+
+Modal Header: Upload Attachments
+
+Supported File Types:
+Images (JPEG, PNG, GIF, BMP, SVG, TIFF), Archives (ZIP, RAR, 7Z, GZIP, TAR)
+
+Accepted Extensions:
+Images: .jpg, .jpeg, .png, .gif, .bmp, .svg, .tiff, .tif
+Archives: .zip, .rar, .7z, .gz, .tar
+
+===============================================================================
+EXAMPLE 4: Categories = "Email,Contact,Calendar"
+===============================================================================
+
+Modal Header: Upload Attachments
+
+Supported File Types:
+Email Files (MSG, EML, MBOX), Contact Files (VCF), Calendar Files (ICS, VCS)
+
+Accepted Extensions:
+Email: .msg, .eml, .mbox
+Contacts: .vcf
+Calendar: .ics, .vcs
+
+===============================================================================
+EXAMPLE 5: Categories = "Text,Data"
+===============================================================================
+
+Modal Header: Upload Attachments
+
+Supported File Types:
+Text Files (TXT, HTML, CSS, JS, XML, Markdown), Data Files (JSON, XML, YAML, CSV)
+
+Accepted Extensions:
+Text: .txt, .html, .css, .js, .md, .ini, .log
+Data: .json, .xml, .yaml, .yml, .csv, .tsv
+
+Note: XML and YAML extensions are prioritized under Data category to avoid
+      duplication between Text and Data categories.
+
+===============================================================================
+EXAMPLE 6: No Categories (Empty string or undefined)
+===============================================================================
+
+Modal Header: Upload Attachments
+
+Supported File Types:
+All file types are supported
+
+Accepted Extensions:
+All file extensions are accepted
+
+===============================================================================
+EXAMPLE 7: Categories = "Document,Presentation"
+===============================================================================
+
+Modal Header: Upload Attachments
+
+Supported File Types:
+Documents (PDF, Word, RTF, OpenDocument), Presentations (PowerPoint, OpenDocument)
+
+Accepted Extensions:
+Documents: .pdf, .doc, .docx, .dotx, .rtf, .odt
+Presentations: .ppt, .pptx, .pptm, .potx, .ppsx, .odp
+
+===============================================================================
+EXAMPLE 8: Categories = "Audio,Video"
+===============================================================================
+
+Modal Header: Upload Attachments
+
+Supported File Types:
+Audio (MP3, WAV, OGG, AAC), Video (MP4, AVI, MOV, WebM)
+
+Accepted Extensions:
+Audio: .mp3, .wav, .ogg, .m4a, .aac
+Video: .mp4, .avi, .mov, .webm, .ogv
+
+===============================================================================
+UI FORMATTING DETAILS
+===============================================================================
+
+The upload modal displays information with the following styling:
+
+1. Modal Header: "Upload Attachments" (large, bold)
+2. File Input: Standard file picker button
+3. "Supported File Types:" (14px, bold, secondary color)
+4. Main description text (12px, normal weight, secondary color, line-height: 1.4)
+5. "Accepted Extensions:" (11px, bold, secondary color)
+6. Extension lists (10px, gray color #666)
+   - Category names are bold
+   - Extensions are comma-separated
+   - Scrollable if content exceeds 100px height
+
+===============================================================================
+DEDUPLICATION LOGIC
+===============================================================================
+
+The component implements smart deduplication to avoid showing the same 
+extension in multiple categories:
+
+Priority Rules:
+- .csv, .tsv → Prioritized under "Spreadsheets" 
+- .xml, .yaml, .yml → Prioritized under "Data"
+- Other conflicts → First category wins
+
+This ensures each extension appears only once, providing a clean user experience.
+
+===============================================================================
+SUPPORTED FILE EXTENSIONS BY CATEGORY
+===============================================================================
+
+Document Extensions:
+.pdf, .doc, .docx, .dotx, .rtf, .odt
+
+Spreadsheet Extensions:
+.xls, .xlsx, .xlsm, .xltx, .csv, .tsv, .ods
+
+Presentation Extensions:
+.ppt, .pptx, .pptm, .potx, .ppsx, .odp
+
+Image Extensions:
+.jpg, .jpeg, .png, .gif, .bmp, .svg, .tiff, .tif
+
+Audio Extensions:
+.mp3, .wav, .ogg, .m4a, .aac
+
+Video Extensions:
+.mp4, .avi, .mov, .webm, .ogv
+
+Text Extensions:
+.txt, .html, .css, .js, .md, .ini, .log
+
+Archive Extensions:
+.zip, .rar, .7z, .gz, .tar
+
+Email Extensions:
+.msg, .eml, .mbox
+
+Contact Extensions:
+.vcf
+
+Calendar Extensions:
+.ics, .vcs
+
+Data Extensions:
+.json, .xml, .yaml, .yml, .csv, .tsv
+
+===============================================================================
+TECHNICAL IMPLEMENTATION NOTES
+===============================================================================
+
+1. The component uses two helper functions:
+   - getSupportedFileTypesDescription(): Returns human-readable descriptions
+   - getDetailedFileExtensions(): Returns organized extension lists
+
+2. Deduplication is handled automatically to prevent confusion
+
+3. Categories are case-insensitive and whitespace-trimmed
+
+4. The UI is responsive and scrollable for large lists
+
+5. All newly added file types (TIFF, CSV, XML, etc.) are properly supported
+
+===============================================================================
+END OF DOCUMENT
+===============================================================================
