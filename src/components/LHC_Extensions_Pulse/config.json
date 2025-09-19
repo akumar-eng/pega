@@ -97,6 +97,43 @@
       "description": "Display action buttons for each message",
       "format": "BOOLEAN",
       "defaultValue": false
+    },
+    {
+      "name": "enableAttachmentUpload",
+      "label": "Enable Attachment Upload",
+      "description": "Allow users to upload attachments to pulse messages",
+      "format": "BOOLEAN",
+      "defaultValue": false
+    },
+    {
+      "name": "allowedFileTypes",
+      "label": "Allowed File Types",
+      "description": "Comma-separated list of allowed file extensions (e.g., .pdf,.doc,.jpg)",
+      "format": "TEXT",
+      "defaultValue": ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif"
+    },
+    {
+      "name": "maxFileSize",
+      "label": "Maximum File Size (bytes)",
+      "description": "Maximum file size allowed for uploads in bytes",
+      "format": "NUMBER",
+      "defaultValue": 5242880,
+      "minValue": 1024,
+      "maxValue": 52428800
+    },
+    {
+      "name": "uploadEndpoint",
+      "label": "Upload Endpoint",
+      "description": "API endpoint for file uploads",
+      "format": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "name": "attachmentLabel",
+      "label": "Attachment Button Label",
+      "description": "Label text for the attachment upload button",
+      "format": "TEXT",
+      "defaultValue": "Attach File"
     }
   ],
   "defaultConfig": {
@@ -109,7 +146,12 @@
     "headerText": "Pulse Feed",
     "variant": "default",
     "showAuthor": true,
-    "showActions": false
+    "showActions": false,
+    "enableAttachmentUpload": false,
+    "allowedFileTypes": ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif",
+    "maxFileSize": 5242880,
+    "uploadEndpoint": "",
+    "attachmentLabel": "Attach File"
   },
   "presets": [
     {
@@ -146,7 +188,26 @@
         "showAuthor": true,
         "showActions": true,
         "enableRefresh": true,
-        "maxMessages": 5
+        "maxMessages": 5,
+        "enableAttachmentUpload": true,
+        "allowedFileTypes": ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif",
+        "maxFileSize": 5242880
+      }
+    },
+    {
+      "name": "uploadEnabledFeed",
+      "label": "Upload Enabled Feed",
+      "description": "Pulse feed with attachment upload functionality",
+      "values": {
+        "variant": "default",
+        "showTimestamp": true,
+        "showAuthor": true,
+        "showActions": true,
+        "enableAttachmentUpload": true,
+        "allowedFileTypes": ".pdf,.doc,.docx,.jpg,.jpeg,.png",
+        "maxFileSize": 10485760,
+        "attachmentLabel": "Upload File",
+        "maxMessages": 10
       }
     }
   ]

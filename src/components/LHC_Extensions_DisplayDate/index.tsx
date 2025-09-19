@@ -2,13 +2,29 @@ import { useMemo } from 'react';
 import { withConfiguration, Text } from '@pega/cosmos-react-core';
 import '../create-nonce';
 
-type DisplayDateProps = {
-  value: string;
+// PConnect Props interface for Pega Constellation components
+export interface PConnFieldProps {
+  getPConnect?: () => any;
+  value?: any;
+  validatemessage?: string;
+  label?: string;
+  hideLabel?: boolean;
+  helperText?: string;
+  testId?: string;
+  additionalProps?: Record<string, any>;
+  displayMode?: string;
+  variant?: string;
+  hasSuggestions?: boolean;
+}
+
+type DisplayDateProps = PConnFieldProps & {
+  value?: string | Date | number;
   dateFormat?: string;
   showTime?: boolean;
   timeFormat?: '12' | '24';
   locale?: string;
   emptyValueDisplay?: string;
+  variant?: 'default' | 'compact' | 'detailed';
   getPConnect: any;
 };
 
@@ -83,22 +99,77 @@ export const LHCExtensionsDisplayDate = (props: DisplayDateProps) => {
     timeFormat = '12',
     locale = 'en-US',
     emptyValueDisplay = '-',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getPConnect
+    label,
+    hideLabel = false,
+    helperText,
+    testId,
+    variant = 'default',
+    getPConnect,
+    ...otherProps
   } = props;
 
+  // Get the actual value from PConnect if available
+  const pConn = getPConnect?.();
+  const actualValue = value || pConn?.getValue?.() || '';
+
   const formattedDate = useMemo(() => {
-    if (!value || value.trim() === '') {
+    if (!actualValue || (typeof actualValue === 'string' && actualValue.trim() === '')) {
       return emptyValueDisplay;
     }
 
-    return formatDate(value, dateFormat, showTime, timeFormat, locale);
-  }, [value, dateFormat, showTime, timeFormat, locale, emptyValueDisplay]);
+    return formatDate(actualValue, dateFormat, showTime, timeFormat, locale);
+  }, [actualValue, dateFormat, showTime, timeFormat, locale, emptyValueDisplay]);
+
+  // Determine styling based on variant
+  const getVariantStyles = () => {
+    switch (variant) {
+      case 'compact':
+        return { fontSize: '12px', padding: '2px 4px' };
+      case 'detailed':
+        return { fontSize: '16px', padding: '8px', fontWeight: '500' };
+      default:
+        return { fontSize: '14px' };
+    }
+  };
 
   return (
-    <Text variant='primary' style={{ fontFamily: 'inherit' }}>
-      {formattedDate}
-    </Text>
+    <div data-testid={testId} style={{ fontFamily: 'inherit' }} {...otherProps}>
+      {!hideLabel && label && (
+        <div
+          style={{
+            display: 'block',
+            marginBottom: '4px',
+            fontSize: '12px',
+            fontWeight: '500',
+            color: '#333'
+          }}
+        >
+          {label}
+        </div>
+      )}
+
+      <Text
+        variant='primary'
+        style={{
+          fontFamily: 'inherit',
+          ...getVariantStyles()
+        }}
+      >
+        {formattedDate}
+      </Text>
+
+      {helperText && (
+        <div
+          style={{
+            fontSize: '11px',
+            color: '#666',
+            marginTop: '2px'
+          }}
+        >
+          {helperText}
+        </div>
+      )}
+    </div>
   );
 };
 

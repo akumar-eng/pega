@@ -1,44 +1,29 @@
 {
   "name": "LHC_Extensions_DisplayDate",
   "label": "Display Date",
-  "description": "Display dates in configurable formats (dd/mm/yyyy, mm/dd/yyyy, etc.)",
+  "description": "Display dates in configurable formats with internationalization support",
   "organization": "LHC",
   "version": "1.0.0",
   "library": "Extensions",
   "allowedApplications": [],
   "componentKey": "LHC_Extensions_DisplayDate",
   "type": "Field",
-  "subtype": "Text",
+  "subtype": "Date",
   "properties": [
     {
-      "name": "labelOption",
-      "label": "Label value",
-      "format": "SELECT",
-      "defaultValue": "custom",
-      "source": [
-        {
-          "key": "default",
-          "value": "Default"
-        },
-        {
-          "key": "custom",
-          "value": "Custom"
-        }
-      ]
-    },
-    {
-      "name": "label",
-      "label": "Custom label value",
-      "format": "VALUEINPUT",
-      "required": true,
-      "ruleType": "Paragraph"
+      "name": "value",
+      "label": "Date Value",
+      "description": "The date value to display",
+      "format": "TEXT",
+      "defaultValue": "@P .pyWorkPage"
     },
     {
       "name": "dateFormat",
       "label": "Date Format",
+      "description": "Choose the format for displaying the date",
       "format": "SELECT",
       "defaultValue": "dd/mm/yyyy",
-      "source": [
+      "options": [
         {
           "key": "dd/mm/yyyy",
           "value": "DD/MM/YYYY (European)"
@@ -72,15 +57,17 @@
     {
       "name": "showTime",
       "label": "Show Time",
+      "description": "Include time component in the display",
       "format": "BOOLEAN",
       "defaultValue": false
     },
     {
       "name": "timeFormat",
       "label": "Time Format",
+      "description": "Choose 12-hour or 24-hour time format",
       "format": "SELECT",
       "defaultValue": "12",
-      "source": [
+      "options": [
         {
           "key": "12",
           "value": "12-hour (AM/PM)"
@@ -94,9 +81,10 @@
     {
       "name": "locale",
       "label": "Locale",
+      "description": "Language and region settings for date formatting",
       "format": "SELECT",
       "defaultValue": "en-US",
-      "source": [
+      "options": [
         {
           "key": "en-US",
           "value": "English (US)"
@@ -120,28 +108,139 @@
         {
           "key": "it-IT",
           "value": "Italian"
+        },
+        {
+          "key": "ja-JP",
+          "value": "Japanese"
+        },
+        {
+          "key": "zh-CN",
+          "value": "Chinese (Simplified)"
         }
       ]
     },
     {
       "name": "emptyValueDisplay",
       "label": "Empty Value Display",
-      "format": "VALUEINPUT",
-      "defaultValue": "-",
-      "ruleType": "Paragraph"
+      "description": "Text to display when date value is empty or null",
+      "format": "TEXT",
+      "defaultValue": "-"
     },
     {
-      "name": "visibility",
-      "label": "Visible",
-      "format": "VISIBILITY"
+      "name": "label",
+      "label": "Field Label",
+      "description": "Label text for the date field",
+      "format": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "name": "hideLabel",
+      "label": "Hide Label",
+      "description": "Hide the field label when displaying",
+      "format": "BOOLEAN",
+      "defaultValue": false
+    },
+    {
+      "name": "helperText",
+      "label": "Helper Text",
+      "description": "Additional help text displayed below the field",
+      "format": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "name": "testId",
+      "label": "Test ID",
+      "description": "Unique identifier for testing purposes",
+      "format": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "name": "variant",
+      "label": "Display Variant",
+      "description": "Visual styling variant for the date display",
+      "format": "SELECT",
+      "defaultValue": "default",
+      "options": [
+        {
+          "key": "default",
+          "value": "Default"
+        },
+        {
+          "key": "compact",
+          "value": "Compact"
+        },
+        {
+          "key": "detailed",
+          "value": "Detailed"
+        }
+      ]
     }
   ],
   "defaultConfig": {
-    "label": "@L $this.label",
+    "value": "@P .pyWorkPage",
     "dateFormat": "dd/mm/yyyy",
     "showTime": false,
     "timeFormat": "12",
     "locale": "en-US",
-    "emptyValueDisplay": "-"
-  }
+    "emptyValueDisplay": "-",
+    "label": "",
+    "hideLabel": false,
+    "helperText": "",
+    "testId": "",
+    "variant": "default"
+  },
+  "presets": [
+    {
+      "name": "europeanDate",
+      "label": "European Date Format",
+      "description": "Standard European date format (DD/MM/YYYY)",
+      "values": {
+        "dateFormat": "dd/mm/yyyy",
+        "locale": "en-GB",
+        "showTime": false
+      }
+    },
+    {
+      "name": "americanDate",
+      "label": "American Date Format",
+      "description": "Standard US date format (MM/DD/YYYY)",
+      "values": {
+        "dateFormat": "mm/dd/yyyy",
+        "locale": "en-US",
+        "showTime": false
+      }
+    },
+    {
+      "name": "isoDateTime",
+      "label": "ISO Date and Time",
+      "description": "ISO standard date and time format",
+      "values": {
+        "dateFormat": "yyyy-mm-dd",
+        "showTime": true,
+        "timeFormat": "24",
+        "locale": "en-US"
+      }
+    },
+    {
+      "name": "germanFormat",
+      "label": "German Date Format",
+      "description": "German localized date format",
+      "values": {
+        "dateFormat": "dd.mm.yyyy",
+        "locale": "de-DE",
+        "showTime": false
+      }
+    },
+    {
+      "name": "compactDisplay",
+      "label": "Compact Date Display",
+      "description": "Space-efficient date display",
+      "values": {
+        "variant": "compact",
+        "dateFormat": "dd/mm/yyyy",
+        "hideLabel": true,
+        "showTime": false
+      }
+    }
+  ]
 }

@@ -49,6 +49,26 @@ const meta: Meta<typeof LhcExtensionsPulse> = {
     showActions: {
       control: 'boolean',
       description: 'Display action buttons for each message'
+    },
+    enableAttachmentUpload: {
+      control: 'boolean',
+      description: 'Enable attachment upload functionality'
+    },
+    allowedFileTypes: {
+      control: 'text',
+      description: 'Comma-separated list of allowed file extensions'
+    },
+    maxFileSize: {
+      control: { type: 'number', min: 1024, max: 52428800 },
+      description: 'Maximum file size in bytes'
+    },
+    uploadEndpoint: {
+      control: 'text',
+      description: 'API endpoint for file uploads'
+    },
+    attachmentLabel: {
+      control: 'text',
+      description: 'Label for the attachment upload button'
     }
   }
 };
@@ -143,4 +163,64 @@ export const MinimalSetup: Story = {
     messageIDs: '.SimplePulse',
     getPConnect: mockGetPConnect
   } as any
+};
+
+export const WithAttachmentUpload: Story = {
+  args: {
+    ...Default.args,
+    headerText: 'Pulse Feed with File Upload',
+    enableAttachmentUpload: true,
+    allowedFileTypes: '.pdf,.doc,.docx,.jpg,.jpeg,.png,.gif',
+    maxFileSize: 5242880, // 5MB
+    attachmentLabel: 'Attach File',
+    uploadEndpoint: '', // Demo mode
+    showActions: true
+  }
+};
+
+export const AttachmentUploadCustom: Story = {
+  args: {
+    ...Default.args,
+    headerText: 'Custom Upload Configuration',
+    enableAttachmentUpload: true,
+    allowedFileTypes: '.pdf,.docx,.xlsx,.pptx',
+    maxFileSize: 10485760, // 10MB
+    attachmentLabel: 'Upload Document',
+    uploadEndpoint: '/api/upload',
+    variant: 'detailed',
+    showActions: true,
+    enableRefresh: true
+  }
+};
+
+export const AttachmentUploadImageOnly: Story = {
+  args: {
+    ...Default.args,
+    headerText: 'Image Upload Only',
+    enableAttachmentUpload: true,
+    allowedFileTypes: '.jpg,.jpeg,.png,.gif,.webp',
+    maxFileSize: 2097152, // 2MB
+    attachmentLabel: 'Upload Image',
+    uploadEndpoint: '',
+    variant: 'compact',
+    showTimestamp: true
+  }
+};
+
+export const FullFeatured: Story = {
+  args: {
+    ...Default.args,
+    headerText: 'Full-Featured Pulse Feed',
+    variant: 'detailed',
+    showTimestamp: true,
+    showAuthor: true,
+    showActions: true,
+    enableRefresh: true,
+    enableAttachmentUpload: true,
+    allowedFileTypes: '.pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt,.csv',
+    maxFileSize: 10485760, // 10MB
+    attachmentLabel: 'Add Attachment',
+    uploadEndpoint: '/api/pulse/upload',
+    maxMessages: 8
+  }
 };
