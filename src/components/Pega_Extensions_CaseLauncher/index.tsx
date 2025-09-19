@@ -1,4 +1,12 @@
-import { withConfiguration, Card, CardHeader, CardContent, CardFooter, Text, Button } from '@pega/cosmos-react-core';
+import {
+  withConfiguration,
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  Text,
+  Button
+} from '@pega/cosmos-react-core';
 import StyledCard from './styles';
 import '../create-nonce';
 
@@ -24,7 +32,7 @@ export const PegaExtensionsCaseLauncher = (props: CaseLauncherProps) => {
     const options = {
       flowType: 'pyStartCase',
       containerName: 'primary',
-      openCaseViewAfterCreate: true,
+      openCaseViewAfterCreate: true
     };
 
     pConn.getActionsApi().createWork(className, options);

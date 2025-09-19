@@ -7,44 +7,44 @@ export default {
   argTypes: {
     detailsDataPage: {
       table: {
-        disable: true,
-      },
+        disable: true
+      }
     },
     detailsViewName: {
       table: {
-        disable: true,
-      },
+        disable: true
+      }
     },
     dataPage: {
       table: {
-        disable: true,
-      },
+        disable: true
+      }
     },
     categoryFieldName: {
-      table: { disable: true },
+      table: { disable: true }
     },
     parentFieldName: {
-      table: { disable: true },
+      table: { disable: true }
     },
     dependenciesFieldName: {
-      table: { disable: true },
+      table: { disable: true }
     },
     startDateFieldName: {
-      table: { disable: true },
+      table: { disable: true }
     },
     endDateFieldName: {
-      table: { disable: true },
+      table: { disable: true }
     },
     progressFieldName: {
-      table: { disable: true },
+      table: { disable: true }
     },
     getPConnect: {
       table: {
-        disable: true,
-      },
-    },
+        disable: true
+      }
+    }
   },
-  component: PegaExtensionsGanttChart,
+  component: PegaExtensionsGanttChart
 };
 
 const currentDate = new Date();
@@ -58,7 +58,8 @@ const getDataFromStorage = () => {
   return item;
 };
 
-const saveDataToStorage = (data: any) => localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+const saveDataToStorage = (data: any) =>
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
 
 const tasks: any = {
   'P-1001': {
@@ -73,7 +74,7 @@ const tasks: any = {
     ProjectID: undefined,
     pyStatusWork: 'New',
     pzInsKey: 'OPGO8L-CARINSUR-WORK P-1001',
-    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment',
+    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment'
   },
   'T-1001': {
     pyID: 'T-1001',
@@ -87,7 +88,7 @@ const tasks: any = {
     ProjectID: 'P-1001',
     pyStatusWork: 'New',
     pzInsKey: 'OPGO8L-CARINSUR-WORK T-1001',
-    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment',
+    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment'
   },
   'T-1002': {
     pyID: 'T-1002',
@@ -101,7 +102,7 @@ const tasks: any = {
     ProjectID: 'P-1001',
     pyStatusWork: 'New',
     pzInsKey: 'OPGO8L-CARINSUR-WORK T-1002',
-    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment',
+    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment'
   },
   'T-1003': {
     pyID: 'T-1003',
@@ -115,7 +116,7 @@ const tasks: any = {
     ProjectID: 'P-1001',
     pyStatusWork: 'New',
     pzInsKey: 'OPGO8L-CARINSUR-WORK T-1003',
-    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment',
+    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment'
   },
   'M-1001': {
     pyID: 'M-1001',
@@ -129,7 +130,7 @@ const tasks: any = {
     ProjectID: 'P-1001',
     pyStatusWork: 'New',
     pzInsKey: 'OPGO8L-CARINSUR-WORK M-1001',
-    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment',
+    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment'
   },
   'T-1004': {
     pyID: 'T-1004',
@@ -143,7 +144,7 @@ const tasks: any = {
     ProjectID: 'P-1001',
     pyStatusWork: 'New',
     pzInsKey: 'OPGO8L-CARINSUR-WORK T-1004',
-    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment',
+    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment'
   },
   'M-1002': {
     pyID: 'M-1002',
@@ -157,8 +158,8 @@ const tasks: any = {
     ProjectID: 'P-1001',
     pyStatusWork: 'New',
     pzInsKey: 'OPGO8L-CARINSUR-WORK M-1002',
-    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment',
-  },
+    pxObjClass: 'OPGO8L-CarInsur-Work-Appointment'
+  }
 };
 
 const setPCore = () => {
@@ -167,7 +168,7 @@ const setPCore = () => {
       return {
         getLocaleValue: (val: string) => {
           return val;
-        },
+        }
       };
     },
     createPConnect: () => ({
@@ -183,26 +184,26 @@ const setPCore = () => {
                     {id}
                   </Link>
                 </h3>
-              ),
+              )
             },
             { name: 'Description', value: tasks[id].pyDescription },
             { name: 'Progress', value: tasks[id].Progress },
             {
               name: 'Start',
-              value: <DateTimeDisplay variant='datetime' value={tasks[id].StartDate} />,
+              value: <DateTimeDisplay variant='datetime' value={tasks[id].StartDate} />
             },
             {
               name: 'End',
-              value: <DateTimeDisplay variant='datetime' value={tasks[id].EndDate} />,
-            },
+              value: <DateTimeDisplay variant='datetime' value={tasks[id].EndDate} />
+            }
           ];
           return <FieldValueList variant='stacked' fields={fields} />;
-        },
-      }),
+        }
+      })
     }),
     getComponentsRegistry: () => {
       return {
-        getLazyComponent: (f: string) => f,
+        getLazyComponent: (f: string) => f
       };
     },
     getViewResources: () => {
@@ -210,25 +211,25 @@ const setPCore = () => {
         fetchViewResources: () => {
           return {
             config: {
-              showLabel: true,
-            },
+              showLabel: true
+            }
           };
         },
-        updateViewResources: () => {},
+        updateViewResources: () => {}
       };
     },
     getEnvironmentInfo: () => {
       return {
-        getTimeZone: () => 'local',
+        getTimeZone: () => 'local'
       };
     },
     getEvents: () => {
       return {
         getCaseEvent: () => {
           return {
-            ASSIGNMENT_SUBMISSION: 'ASSIGNMENT_SUBMISSION',
+            ASSIGNMENT_SUBMISSION: 'ASSIGNMENT_SUBMISSION'
           };
-        },
+        }
       };
     },
     getPubSubUtils: () => {
@@ -238,7 +239,7 @@ const setPCore = () => {
         },
         unsubscribe: () => {
           /* nothing */
-        },
+        }
       };
     },
     getSemanticUrlUtils: () => {
@@ -248,9 +249,9 @@ const setPCore = () => {
         },
         getActions: () => {
           return {
-            ACTION_OPENWORKBYHANDLE: 'openWorkByHandle',
+            ACTION_OPENWORKBYHANDLE: 'openWorkByHandle'
           };
-        },
+        }
       };
     },
     getDataApiUtils: () => {
@@ -258,8 +259,8 @@ const setPCore = () => {
         getCaseEditLock: () => {
           return Promise.resolve({
             headers: {
-              etag: 'xxx',
-            },
+              etag: 'xxx'
+            }
           });
         },
         updateCaseEditFieldsData: (pzInsKey: string, payload: any) => {
@@ -271,7 +272,7 @@ const setPCore = () => {
             tasksFromWebStorage = [
               ...tasksFromWebStorage.slice(0, taskIndex),
               task,
-              ...tasksFromWebStorage.slice(taskIndex + 1),
+              ...tasksFromWebStorage.slice(taskIndex + 1)
             ];
             saveDataToStorage(tasksFromWebStorage);
           }
@@ -282,10 +283,10 @@ const setPCore = () => {
             data: {
               data: {
                 content: {
-                  pyStatusWork: 'New',
-                },
-              },
-            },
+                  pyStatusWork: 'New'
+                }
+              }
+            }
           });
         },
         getData: () => {
@@ -294,18 +295,18 @@ const setPCore = () => {
           if (!ganttData) saveDataToStorage(mockData);
           return Promise.resolve({
             data: {
-              data: ganttData || mockData,
-            },
+              data: ganttData || mockData
+            }
           });
-        },
+        }
       };
-    },
+    }
   };
 };
 
 type Story = StoryObj<typeof PegaExtensionsGanttChart>;
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     setPCore();
     const props = {
       ...args,
@@ -314,7 +315,7 @@ export const Default: Story = {
           getContextName: () => 'primary',
           getContainerManager: () => ({
             addTransientItem: () => {},
-            updateTransientData: () => {},
+            updateTransientData: () => {}
           }),
           getLocalizedValue: (val: string) => {
             return val;
@@ -338,7 +339,7 @@ export const Default: Story = {
               },
               showCasePreview: () => {
                 /* nothing */
-              },
+              }
             };
           },
           ignoreSuggestion: () => {
@@ -352,9 +353,9 @@ export const Default: Story = {
           },
           resolveConfigProps: () => {
             /* nothing */
-          },
+          }
         };
-      },
+      }
     };
 
     const otherProps = {
@@ -363,7 +364,7 @@ export const Default: Story = {
       dependenciesFieldName: 'Dependencies',
       startDateFieldName: 'StartDate',
       endDateFieldName: 'EndDate',
-      progressFieldName: 'Progress',
+      progressFieldName: 'Progress'
     };
     return <PegaExtensionsGanttChart {...props} {...otherProps} />;
   },
@@ -374,6 +375,6 @@ export const Default: Story = {
     showDetailsColumns: true,
     dataPage: '',
     detailsDataPage: '',
-    detailsViewName: '',
-  },
+    detailsViewName: ''
+  }
 };

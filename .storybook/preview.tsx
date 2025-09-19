@@ -1,7 +1,10 @@
 import { useEffect as useReactEffect } from 'react';
 import { configureActions } from '@storybook/addon-actions';
 import { css } from '@storybook/theming';
-import { useEffect as useStorybookEffect, useMemo as useStorybookMemo } from '@storybook/preview-api';
+import {
+  useEffect as useStorybookEffect,
+  useMemo as useStorybookMemo
+} from '@storybook/preview-api';
 import type { Preview } from '@storybook/react';
 import {
   Configuration,
@@ -11,7 +14,7 @@ import {
   Aries2023Theme,
   Aries2023DarkTheme,
   ThemeMachine,
-  BaseThemeMachine,
+  BaseThemeMachine
 } from '@pega/cosmos-react-core';
 import type { DefaultSettableTheme, DefaultThemeDefinition } from '@pega/cosmos-react-core';
 import * as MantisTheme from './MantisTheme.json';
@@ -20,7 +23,7 @@ import * as HoneyFlowerTheme from './HoneyFlowerTheme.json';
 
 configureActions({
   depth: 5,
-  limit: 20,
+  limit: 20
 });
 
 const themes: Record<string, DefaultSettableTheme | undefined> = {
@@ -28,33 +31,33 @@ const themes: Record<string, DefaultSettableTheme | undefined> = {
   Dark: Aries2023DarkTheme,
   Mantis: MantisTheme,
   Flame: FlameTheme,
-  HoneyFlower: HoneyFlowerTheme,
+  HoneyFlower: HoneyFlowerTheme
 };
 
 const themeMachines = Object.fromEntries(
   Object.entries(themes).map(([name, theme]) => [
     name,
-    new ThemeMachine<DefaultThemeDefinition>({ theme, parent: BaseThemeMachine }),
-  ]),
+    new ThemeMachine<DefaultThemeDefinition>({ theme, parent: BaseThemeMachine })
+  ])
 );
 
 const preview: Preview = {
   parameters: {
     options: {
       storySort: {
-        order: ['Getting Started', 'Libraries', 'Support and Contributing'],
-      },
+        order: ['Getting Started', 'Libraries', 'Support and Contributing']
+      }
     },
     backgrounds: {
       disable: true,
       grid: {
-        disable: true,
-      },
+        disable: true
+      }
     },
     outline: {
-      disable: true,
+      disable: true
     },
-    controls: { hideNoControlsWarning: true },
+    controls: { hideNoControlsWarning: true }
   },
 
   decorators: [
@@ -87,7 +90,8 @@ const preview: Preview = {
     // Sets up shadow DOM rendering
     (Story, context) => {
       const backgroundStyles = useStorybookMemo(() => {
-        const selector = context.viewMode === 'docs' ? `#anchor--${context.id} .docs-story` : '.sb-show-main';
+        const selector =
+          context.viewMode === 'docs' ? `#anchor--${context.id} .docs-story` : '.sb-show-main';
 
         const maxWidth = context.globals.fullscreen !== 'On' ? '1000px' : 'none';
 
@@ -125,8 +129,12 @@ const preview: Preview = {
           }
 
           :root {
-            --addon-backgrounds-gradient-primary: ${themeMachine.theme.base.palette['app-background']};
-            --addon-backgrounds-gradient-secondary: ${themeMachine.theme.base.palette['primary-background']};
+            --addon-backgrounds-gradient-primary: ${themeMachine.theme.base.palette[
+              'app-background'
+            ]};
+            --addon-backgrounds-gradient-secondary: ${themeMachine.theme.base.palette[
+              'primary-background'
+            ]};
             background: repeating-conic-gradient(
                 var(--addon-backgrounds-gradient-primary) 0% 25%,
                 var(--addon-backgrounds-gradient-secondary) 0% 50%
@@ -147,10 +155,18 @@ const preview: Preview = {
             max-width: ${maxWidth}!important;
           }
         `.styles;
-      }, [context.viewMode, context.globals.theme, context.globals.backgrounds, context.globals.fullscreen]);
+      }, [
+        context.viewMode,
+        context.globals.theme,
+        context.globals.backgrounds,
+        context.globals.fullscreen
+      ]);
 
       useStorybookEffect(() => {
-        const id = context.viewMode === 'docs' ? `addon-backgrounds-docs-${context.id}` : 'addon-backgrounds-color';
+        const id =
+          context.viewMode === 'docs'
+            ? `addon-backgrounds-docs-${context.id}`
+            : 'addon-backgrounds-color';
 
         const existingStyleEl = document.getElementById(id);
         if (existingStyleEl) {
@@ -168,7 +184,7 @@ const preview: Preview = {
       }, [backgroundStyles, context.viewMode, context.id]);
 
       return <Story {...context} />;
-    },
+    }
   ],
 
   globalTypes: {
@@ -178,8 +194,8 @@ const preview: Preview = {
       defaultValue: 'Default',
       toolbar: {
         icon: 'paintbrush',
-        items: Object.keys(themes),
-      },
+        items: Object.keys(themes)
+      }
     },
     backgrounds: {
       name: 'Backgrounds',
@@ -187,8 +203,8 @@ const preview: Preview = {
       defaultValue: 'Clear',
       toolbar: {
         icon: 'photo',
-        items: ['Clear', 'App Background', 'Primary Background', 'Secondary Background'],
-      },
+        items: ['Clear', 'App Background', 'Primary Background', 'Secondary Background']
+      }
     },
     fullscreen: {
       name: 'Fullscreen',
@@ -196,8 +212,8 @@ const preview: Preview = {
       defaultValue: 'Off',
       toolbar: {
         icon: 'grow',
-        items: ['Off', 'On'],
-      },
+        items: ['Off', 'On']
+      }
     },
     locale: {
       name: 'Locale',
@@ -209,9 +225,9 @@ const preview: Preview = {
           { value: 'en-US', right: '🇺🇸', title: 'English (US)' },
           { value: 'pl', right: '🇵🇱', title: 'Polish' },
           { value: 'fr', right: '🇫🇷', title: 'Français' },
-          { value: 'ar', right: '🇦🇪', title: 'عربي' },
-        ],
-      },
+          { value: 'ar', right: '🇦🇪', title: 'عربي' }
+        ]
+      }
     },
     direction: {
       name: 'Directionality',
@@ -220,11 +236,11 @@ const preview: Preview = {
       toolbar: {
         items: [
           { value: 'ltr', icon: 'arrowrightalt', title: 'Left to Right' },
-          { value: 'rtl', icon: 'arrowleftalt', title: 'Right to Left' },
-        ],
-      },
-    },
-  },
+          { value: 'rtl', icon: 'arrowleftalt', title: 'Right to Left' }
+        ]
+      }
+    }
+  }
 };
 
 export default preview;

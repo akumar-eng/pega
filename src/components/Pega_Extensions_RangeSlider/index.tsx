@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
-import { withConfiguration, Flex, cap, useDirection, CurrencyDisplay, FieldGroup } from '@pega/cosmos-react-core';
+import {
+  withConfiguration,
+  Flex,
+  cap,
+  useDirection,
+  CurrencyDisplay,
+  FieldGroup
+} from '@pega/cosmos-react-core';
 import '../create-nonce';
 import {
   StyledMinValue,
@@ -9,7 +16,7 @@ import {
   StyledMinTrack,
   StyledMaxTrack,
   StyledMaxValue,
-  StyledRangeSliderWrapper,
+  StyledRangeSliderWrapper
 } from './styles';
 
 type RangeSliderProps = {
@@ -55,7 +62,7 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
     maxValueProperty,
     minValueProperty,
     getPConnect,
-    children,
+    children
   } = props;
   const [minValue, setMinValue] = useState(minValueProperty);
   const [maxValue, setMaxValue] = useState(maxValueProperty);
@@ -67,8 +74,10 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
 
   // Get the inherited props from the parent to determine label settings
   const propsToUse = { label, showLabel, ...getPConnect().getInheritedProps() };
-  const maxValuePropName = getPConnect().getRawMetadata().config?.maxValueProperty?.replace('@P ', '') || '';
-  const minValuePropName = getPConnect().getRawMetadata().config?.minValueProperty?.replace('@P ', '') || '';
+  const maxValuePropName =
+    getPConnect().getRawMetadata().config?.maxValueProperty?.replace('@P ', '') || '';
+  const minValuePropName =
+    getPConnect().getRawMetadata().config?.minValueProperty?.replace('@P ', '') || '';
 
   const refreshForm = useCallback(() => {
     const caseKey = getPConnect().getCaseInfo().getKey();
@@ -86,7 +95,7 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
 
   const minMoveThumb = useCallback(
     (e: MouseEvent | TouchEvent) => {
-      setMinValue((prevValue) => {
+      setMinValue(prevValue => {
         let newValue = prevValue;
         if (minTrackRef.current) {
           const track = minTrackRef.current.getBoundingClientRect();
@@ -106,12 +115,12 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
         return newValue;
       });
     },
-    [start, end, min, max, step, maxValue, getPConnect, minValuePropName, refreshForm],
+    [start, end, min, max, step, maxValue, getPConnect, minValuePropName, refreshForm]
   );
 
   const maxMoveThumb = useCallback(
     (e: MouseEvent | TouchEvent) => {
-      setMaxValue((prevValue) => {
+      setMaxValue(prevValue => {
         let newValue = prevValue;
         if (maxTrackRef.current) {
           const track = maxTrackRef.current.getBoundingClientRect();
@@ -131,15 +140,26 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
         return newValue;
       });
     },
-    [start, end, min, max, step, minValue, getPConnect, maxValuePropName, refreshForm],
+    [start, end, min, max, step, minValue, getPConnect, maxValuePropName, refreshForm]
   );
 
   const onMinThumbKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.key)) {
+      if (
+        [
+          'ArrowDown',
+          'ArrowUp',
+          'ArrowLeft',
+          'ArrowRight',
+          'PageUp',
+          'PageDown',
+          'Home',
+          'End'
+        ].includes(e.key)
+      ) {
         e.preventDefault();
       }
-      setMinValue((prevValue) => {
+      setMinValue(prevValue => {
         let newValue = prevValue;
         switch (e.key) {
           case 'ArrowDown':
@@ -174,15 +194,26 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
         return newValue;
       });
     },
-    [maxValue, start, minValue, step, end, min, max, getPConnect, minValuePropName, refreshForm],
+    [maxValue, start, minValue, step, end, min, max, getPConnect, minValuePropName, refreshForm]
   );
 
   const onMaxThumbKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.key)) {
+      if (
+        [
+          'ArrowDown',
+          'ArrowUp',
+          'ArrowLeft',
+          'ArrowRight',
+          'PageUp',
+          'PageDown',
+          'Home',
+          'End'
+        ].includes(e.key)
+      ) {
         e.preventDefault();
       }
-      setMaxValue((prevValue) => {
+      setMaxValue(prevValue => {
         let newValue = prevValue;
         switch (e.key) {
           case 'ArrowDown':
@@ -217,7 +248,7 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
         return newValue;
       });
     },
-    [minValue, start, step, end, min, max, getPConnect, maxValuePropName, refreshForm],
+    [minValue, start, step, end, min, max, getPConnect, maxValuePropName, refreshForm]
   );
 
   useEffect(() => {
@@ -257,17 +288,20 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
   const maxPercentage = ((Number(maxValue) - min) / (max - min)) * 100;
 
   return (
-    <FieldGroup name={propsToUse.showLabel ? propsToUse?.label : null} as={StyledRangeSliderWrapper}>
+    <FieldGroup
+      name={propsToUse.showLabel ? propsToUse?.label : null}
+      as={StyledRangeSliderWrapper}
+    >
       <Flex
         as={StyledSlider}
         container={{
           alignItems: 'start',
-          direction: 'row',
+          direction: 'row'
         }}
         style={
           {
             '--min-slider-value': `${minPercentage}%`,
-            '--max-slider-value': `${maxPercentage}%`,
+            '--max-slider-value': `${maxPercentage}%`
           } as CSSProperties
         }
       >
@@ -321,10 +355,18 @@ export const PegaExtensionsRangeSlider = (props: RangeSliderProps) => {
           />
         </Flex>
         <StyledMinValue>
-          <CurrencyDisplay value={minValue} currencyISOCode={currencyCode} formattingOptions={{ fractionDigits: 0 }} />
+          <CurrencyDisplay
+            value={minValue}
+            currencyISOCode={currencyCode}
+            formattingOptions={{ fractionDigits: 0 }}
+          />
         </StyledMinValue>
         <StyledMaxValue>
-          <CurrencyDisplay value={maxValue} currencyISOCode={currencyCode} formattingOptions={{ fractionDigits: 0 }} />
+          <CurrencyDisplay
+            value={maxValue}
+            currencyISOCode={currencyCode}
+            formattingOptions={{ fractionDigits: 0 }}
+          />
         </StyledMaxValue>
       </Flex>
       {Array.isArray(children) ? (

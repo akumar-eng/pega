@@ -7,7 +7,11 @@ type DotsNavigationProps = {
   showSlide: (index: number) => void;
 };
 
-const DotsNavigation: React.FC<DotsNavigationProps> = ({ imageSliderData, currentSlide, showSlide }) => (
+const DotsNavigation: React.FC<DotsNavigationProps> = ({
+  imageSliderData,
+  currentSlide,
+  showSlide
+}) => (
   <DotsContainer>
     {imageSliderData.map((slide, index) => (
       <Dot

@@ -18,8 +18,13 @@ export interface PConnFieldProps {
 
 // Component's local type definition
 export interface PulseProps extends PConnFieldProps {
+  // Data Source Props
+  dataSource?: string;
+  messageProperty?: string;
+  authorProperty?: string;
+  timestampProperty?: string;
+
   // Configuration Props
-  messageIDs?: string;
   showTimestamp?: boolean;
   maxMessages?: number;
   enableRefresh?: boolean;
@@ -47,18 +52,21 @@ export interface PulseProps extends PConnFieldProps {
 
 function LhcExtensionsPulse(props: PulseProps) {
   const {
-    messageIDs = '',
+    // Data Source Props
+    dataSource = 'D_PulseMessages',
+    messageProperty = '.Message',
+    authorProperty = '.Author',
+    timestampProperty = '.Timestamp',
+    
+    // Configuration Props
     showTimestamp = true,
     maxMessages = 10,
     enableRefresh = false,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     refreshInterval = 30000,
     emptyText = 'No pulse messages available',
     headerText = 'Pulse Feed',
     variant = 'default',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     showAuthor = true,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     showActions = false,
     // Attachment Upload Props
     enableAttachmentUpload = false,
@@ -71,7 +79,6 @@ function LhcExtensionsPulse(props: PulseProps) {
   } = props;
 
   // Get PConnect object
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const pConn = getPConnect?.();
 
   // State for attachment upload
@@ -89,13 +96,41 @@ function LhcExtensionsPulse(props: PulseProps) {
   if (isDebugMode) {
     // eslint-disable-next-line no-console
     console.log('LHC_Extensions_Pulse: constructor', {
-      messageIDs,
+      dataSource,
+      messageProperty,
+      authorProperty,
+      timestampProperty,
       showTimestamp,
       maxMessages,
       enableRefresh,
       variant
     });
   }
+
+  // Mock pulse data for demonstration
+  const mockPulseData = [
+    {
+      id: '1',
+      message: 'Customer case updated by John Smith',
+      author: 'John Smith',
+      timestamp: new Date().toISOString(),
+      actions: ['View', 'Reply']
+    },
+    {
+      id: '2', 
+      message: 'New assignment available for review',
+      author: 'System',
+      timestamp: new Date(Date.now() - 300000).toISOString(),
+      actions: ['Accept', 'Decline']
+    },
+    {
+      id: '3',
+      message: 'Document uploaded to case folder',
+      author: 'Jane Doe',
+      timestamp: new Date(Date.now() - 600000).toISOString(),
+      actions: ['Download', 'View']
+    }
+  ];
 
   // Handle pulse message data
   const handlePulseData = () => {
@@ -104,13 +139,27 @@ function LhcExtensionsPulse(props: PulseProps) {
       console.log('LHC_Extensions_Pulse: handlePulseData called');
     }
 
-    // TODO: Implement actual pulse data fetching logic
-    // This would typically involve:
-    // 1. Fetching data using messageIDs property
-    // 2. Processing pulse messages
-    // 3. Handling refresh logic if enabled
-
-    return [];
+    try {
+      // In a real implementation, this would fetch data from the dataSource
+      // For now, return mock data limited by maxMessages
+      const limitedData = mockPulseData.slice(0, maxMessages);
+      
+      if (pConn && dataSource && isDebugMode) {
+        // TODO: Implement actual data fetching
+        // const data = pConn.getValue(dataSource);
+        // Process and return the actual data
+        // eslint-disable-next-line no-console
+        console.log('LHC_Extensions_Pulse: Would fetch from dataSource:', dataSource);
+      }
+      
+      return limitedData;
+    } catch (error) {
+      if (isDebugMode) {
+        // eslint-disable-next-line no-console
+        console.error('LHC_Extensions_Pulse: Error fetching pulse data:', error);
+      }
+      return [];
+    }
   };
 
   // Handle refresh functionality
@@ -194,7 +243,8 @@ function LhcExtensionsPulse(props: PulseProps) {
         // Create FormData for file upload
         const formData = new FormData();
         formData.append('file', selectedFile);
-        formData.append('messageID', messageIDs || '');
+        formData.append('dataSource', dataSource || '');
+        formData.append('messageProperty', messageProperty || '');
 
         // Simulate API call (replace with actual implementation)
         const response = await fetch(uploadEndpoint, {
@@ -264,21 +314,115 @@ function LhcExtensionsPulse(props: PulseProps) {
 
     if (pulseData.length === 0) {
       return (
-        <div className='pulse-empty-state'>
+        <div 
+          className='pulse-empty-state'
+          style={{
+            padding: '20px',
+            textAlign: 'center',
+            color: '#6c757d',
+            fontStyle: 'italic'
+          }}
+        >
           <p>{emptyText}</p>
         </div>
       );
     }
 
-    // TODO: Implement actual pulse message rendering based on variant
-    switch (variant) {
-      case 'compact':
-        return <div className='pulse-compact'>Compact pulse view (to be implemented)</div>;
-      case 'detailed':
-        return <div className='pulse-detailed'>Detailed pulse view (to be implemented)</div>;
-      default:
-        return <div className='pulse-default'>Default pulse view (to be implemented)</div>;
-    }
+    // Render pulse messages based on variant
+    return (
+      <div className={`pulse-messages pulse-variant-${variant}`}>
+        {pulseData.map((message: any, index: number) => {
+          return (
+            <div
+              key={message.id || index}
+              className='pulse-message'
+              style={{
+                marginBottom: '12px',
+                padding: variant === 'compact' ? '8px' : '12px',
+                backgroundColor: '#ffffff',
+                border: '1px solid #e9ecef',
+                borderRadius: '6px',
+                borderLeft: variant === 'detailed' ? '4px solid #007bff' : undefined
+              }}
+            >
+              {/* Message Content */}
+              <div 
+                className='pulse-message-content'
+                style={{
+                  fontSize: variant === 'compact' ? '13px' : '14px',
+                  lineHeight: '1.4',
+                  marginBottom: showAuthor || showTimestamp ? '6px' : '0'
+                }}
+              >
+                {message.message || message[messageProperty] || 'No message content'}
+              </div>
+
+              {/* Author and Timestamp */}
+              {(showAuthor || showTimestamp) && (
+                <div 
+                  className='pulse-message-meta'
+                  style={{
+                    fontSize: '12px',
+                    color: '#6c757d',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: showActions ? '8px' : '0'
+                  }}
+                >
+                  {showAuthor && (
+                    <span className='pulse-author'>
+                      By {message.author || message[authorProperty] || 'Unknown'}
+                    </span>
+                  )}
+                  {showTimestamp && (
+                    <span className='pulse-timestamp'>
+                      {new Date(message.timestamp || message[timestampProperty] || Date.now()).toLocaleString()}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Actions */}
+              {showActions && message.actions && (
+                <div 
+                  className='pulse-message-actions'
+                  style={{
+                    display: 'flex',
+                    gap: '6px',
+                    flexWrap: 'wrap'
+                  }}
+                >
+                  {message.actions.map((action: string, actionIndex: number) => (
+                    <button
+                      key={actionIndex}
+                      type='button'
+                      onClick={() => {
+                        if (isDebugMode) {
+                          // eslint-disable-next-line no-console
+                          console.log(`Action clicked: ${action} on message ${message.id}`);
+                        }
+                      }}
+                      style={{
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        backgroundColor: '#f8f9fa',
+                        border: '1px solid #dee2e6',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        color: '#495057'
+                      }}
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   // Main render
@@ -457,7 +601,9 @@ function LhcExtensionsPulse(props: PulseProps) {
           >
             <strong>Development Mode:</strong> LHC_Extensions_Pulse component
             <br />
-            <strong>Message IDs:</strong> {messageIDs || 'Not configured'}
+            <strong>Data Source:</strong> {dataSource || 'Not configured'}
+            <br />
+            <strong>Message Property:</strong> {messageProperty || 'Not configured'}
             <br />
             <strong>Max Messages:</strong> {maxMessages}
             <br />

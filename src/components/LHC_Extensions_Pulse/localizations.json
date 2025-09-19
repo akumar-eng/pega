@@ -1,0 +1,176 @@
+{
+  "en": {
+    "pulse": {
+      "header": {
+        "defaultTitle": "Pulse Feed",
+        "refreshButton": "Refresh",
+        "noData": "No pulse messages available"
+      },
+      "messages": {
+        "emptyState": "No activity to display at this time",
+        "loadingError": "Unable to load pulse messages",
+        "authorLabel": "By",
+        "timestampFormat": "MM/DD/YYYY HH:mm:ss"
+      },
+      "upload": {
+        "attachFileLabel": "Attach File",
+        "uploadButton": "Upload",
+        "uploadingStatus": "Uploading...",
+        "clearButton": "Clear",
+        "successMessage": "File uploaded successfully!",
+        "errorMessage": "Upload failed. Please try again.",
+        "fileSizeError": "File size exceeds maximum allowed size of {0}MB",
+        "fileTypeError": "File type not allowed. Allowed types: {0}",
+        "selectedFileLabel": "Selected:",
+        "fileSizeLabel": "KB",
+        "maxFileSizeLabel": "Max file size:",
+        "allowedTypesLabel": "Allowed types:",
+        "demoModeMessage": "File uploaded successfully! (Demo mode - no actual upload)"
+      },
+      "actions": {
+        "view": "View",
+        "reply": "Reply",
+        "accept": "Accept",
+        "decline": "Decline",
+        "download": "Download",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "development": {
+        "debugMode": "Development Mode:",
+        "componentLabel": "LHC_Extensions_Pulse component",
+        "dataSource": "Data Source:",
+        "messageProperty": "Message Property:",
+        "maxMessages": "Max Messages:",
+        "showTimestamp": "Show Timestamp:",
+        "attachmentUpload": "Attachment Upload:",
+        "uploadEndpoint": "Upload Endpoint:",
+        "maxFileSize": "Max File Size:",
+        "notConfigured": "Not configured",
+        "demoEndpoint": "Demo mode (no endpoint)",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "status": {
+        "ready": "Component structure ready - business logic needs implementation",
+        "nextSteps": "Next Steps: Implement pulse message fetching, rendering, and real-time updates"
+      }
+    }
+  },
+  "es": {
+    "pulse": {
+      "header": {
+        "defaultTitle": "Feed de Pulso",
+        "refreshButton": "Actualizar",
+        "noData": "No hay mensajes de pulso disponibles"
+      },
+      "messages": {
+        "emptyState": "No hay actividad que mostrar en este momento",
+        "loadingError": "No se pueden cargar los mensajes de pulso",
+        "authorLabel": "Por",
+        "timestampFormat": "DD/MM/YYYY HH:mm:ss"
+      },
+      "upload": {
+        "attachFileLabel": "Adjuntar Archivo",
+        "uploadButton": "Subir",
+        "uploadingStatus": "Subiendo...",
+        "clearButton": "Limpiar",
+        "successMessage": "¡Archivo subido exitosamente!",
+        "errorMessage": "Error al subir. Por favor intente de nuevo.",
+        "fileSizeError": "El tamaño del archivo excede el máximo permitido de {0}MB",
+        "fileTypeError": "Tipo de archivo no permitido. Tipos permitidos: {0}",
+        "selectedFileLabel": "Seleccionado:",
+        "fileSizeLabel": "KB",
+        "maxFileSizeLabel": "Tamaño máximo de archivo:",
+        "allowedTypesLabel": "Tipos permitidos:",
+        "demoModeMessage": "¡Archivo subido exitosamente! (Modo demo - sin subida real)"
+      },
+      "actions": {
+        "view": "Ver",
+        "reply": "Responder",
+        "accept": "Aceptar",
+        "decline": "Rechazar",
+        "download": "Descargar",
+        "edit": "Editar",
+        "delete": "Eliminar"
+      },
+      "development": {
+        "debugMode": "Modo de Desarrollo:",
+        "componentLabel": "Componente LHC_Extensions_Pulse",
+        "dataSource": "Fuente de Datos:",
+        "messageProperty": "Propiedad de Mensaje:",
+        "maxMessages": "Máximo de Mensajes:",
+        "showTimestamp": "Mostrar Timestamp:",
+        "attachmentUpload": "Subida de Adjuntos:",
+        "uploadEndpoint": "Endpoint de Subida:",
+        "maxFileSize": "Tamaño Máximo de Archivo:",
+        "notConfigured": "No configurado",
+        "demoEndpoint": "Modo demo (sin endpoint)",
+        "yes": "Sí",
+        "no": "No"
+      },
+      "status": {
+        "ready": "Estructura del componente lista - necesita implementación de lógica de negocio",
+        "nextSteps": "Próximos Pasos: Implementar obtención de mensajes de pulso, renderización y actualizaciones en tiempo real"
+      }
+    }
+  },
+  "fr": {
+    "pulse": {
+      "header": {
+        "defaultTitle": "Flux de Pouls",
+        "refreshButton": "Actualiser",
+        "noData": "Aucun message de pouls disponible"
+      },
+      "messages": {
+        "emptyState": "Aucune activité à afficher pour le moment",
+        "loadingError": "Impossible de charger les messages de pouls",
+        "authorLabel": "Par",
+        "timestampFormat": "DD/MM/YYYY HH:mm:ss"
+      },
+      "upload": {
+        "attachFileLabel": "Joindre un Fichier",
+        "uploadButton": "Télécharger",
+        "uploadingStatus": "Téléchargement...",
+        "clearButton": "Effacer",
+        "successMessage": "Fichier téléchargé avec succès!",
+        "errorMessage": "Échec du téléchargement. Veuillez réessayer.",
+        "fileSizeError": "La taille du fichier dépasse la taille maximale autorisée de {0}MB",
+        "fileTypeError": "Type de fichier non autorisé. Types autorisés: {0}",
+        "selectedFileLabel": "Sélectionné:",
+        "fileSizeLabel": "KB",
+        "maxFileSizeLabel": "Taille maximale du fichier:",
+        "allowedTypesLabel": "Types autorisés:",
+        "demoModeMessage": "Fichier téléchargé avec succès! (Mode démo - pas de téléchargement réel)"
+      },
+      "actions": {
+        "view": "Voir",
+        "reply": "Répondre",
+        "accept": "Accepter",
+        "decline": "Refuser",
+        "download": "Télécharger",
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "development": {
+        "debugMode": "Mode de Développement:",
+        "componentLabel": "Composant LHC_Extensions_Pulse",
+        "dataSource": "Source de Données:",
+        "messageProperty": "Propriété de Message:",
+        "maxMessages": "Maximum de Messages:",
+        "showTimestamp": "Afficher Timestamp:",
+        "attachmentUpload": "Téléchargement de Pièces Jointes:",
+        "uploadEndpoint": "Point de Terminaison de Téléchargement:",
+        "maxFileSize": "Taille Maximale de Fichier:",
+        "notConfigured": "Non configuré",
+        "demoEndpoint": "Mode démo (pas de point de terminaison)",
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "status": {
+        "ready": "Structure du composant prête - implémentation de la logique métier nécessaire",
+        "nextSteps": "Prochaines Étapes: Implémenter la récupération des messages de pouls, le rendu et les mises à jour en temps réel"
+      }
+    }
+  }
+}

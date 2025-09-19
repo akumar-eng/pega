@@ -9,9 +9,21 @@ const meta: Meta<typeof LhcExtensionsPulse> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    messageIDs: {
+    dataSource: {
       control: 'text',
-      description: 'Property path for pulse message IDs'
+      description: 'Data page or property for pulse messages'
+    },
+    messageProperty: {
+      control: 'text',
+      description: 'Property path for individual pulse messages'
+    },
+    authorProperty: {
+      control: 'text',
+      description: 'Property path for message author'
+    },
+    timestampProperty: {
+      control: 'text',
+      description: 'Property path for message timestamp'
     },
     showTimestamp: {
       control: 'boolean',
@@ -86,7 +98,10 @@ const mockGetPConnect = () => ({
 
 export const Default: Story = {
   args: {
-    messageIDs: '.PulseMessages',
+    dataSource: 'D_PulseMessages',
+    messageProperty: '.Message',
+    authorProperty: '.Author',
+    timestampProperty: '.Timestamp',
     showTimestamp: true,
     maxMessages: 10,
     enableRefresh: false,
@@ -137,7 +152,7 @@ export const EmptyState: Story = {
   args: {
     ...Default.args,
     headerText: 'Empty Pulse Feed',
-    messageIDs: '',
+    dataSource: '',
     emptyText: 'No activity to display at this time'
   }
 };
@@ -146,7 +161,7 @@ export const CustomConfiguration: Story = {
   args: {
     ...Default.args,
     headerText: 'Custom Pulse Configuration',
-    messageIDs: '.CustomPulseData',
+    dataSource: 'D_CustomPulseData',
     maxMessages: 15,
     showTimestamp: true,
     showAuthor: true,
@@ -160,7 +175,7 @@ export const CustomConfiguration: Story = {
 
 export const MinimalSetup: Story = {
   args: {
-    messageIDs: '.SimplePulse',
+    dataSource: 'D_SimplePulse',
     getPConnect: mockGetPConnect
   } as any
 };

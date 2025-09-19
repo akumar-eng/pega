@@ -7,15 +7,36 @@
   "library": "Extensions",
   "allowedApplications": [],
   "componentKey": "LHC_Extensions_Pulse",
-  "type": "Field",
+  "type": "Widget",
   "subtype": "Text",
   "properties": [
     {
-      "name": "messageIDs",
-      "label": "Message IDs",
-      "description": "Property path for pulse message IDs",
+      "name": "dataSource",
+      "label": "Data Source",
+      "description": "Data page or property for pulse messages",
       "format": "TEXT",
       "defaultValue": ""
+    },
+    {
+      "name": "messageProperty",
+      "label": "Message Property",
+      "description": "Property path for individual pulse messages",
+      "format": "TEXT",
+      "defaultValue": ".Message"
+    },
+    {
+      "name": "authorProperty",
+      "label": "Author Property",
+      "description": "Property path for message author",
+      "format": "TEXT",
+      "defaultValue": ".Author"
+    },
+    {
+      "name": "timestampProperty",
+      "label": "Timestamp Property",
+      "description": "Property path for message timestamp",
+      "format": "TEXT",
+      "defaultValue": ".Timestamp"
     },
     {
       "name": "showTimestamp",
@@ -137,7 +158,10 @@
     }
   ],
   "defaultConfig": {
-    "messageIDs": "@P .messageIDs",
+    "dataSource": "D_PulseMessages",
+    "messageProperty": ".Message",
+    "authorProperty": ".Author", 
+    "timestampProperty": ".Timestamp",
     "showTimestamp": true,
     "maxMessages": 10,
     "enableRefresh": false,

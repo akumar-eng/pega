@@ -44,7 +44,7 @@ export const PegaExtensionsCheckboxRow = (props: CheckboxRowProps) => {
     helperText = '',
     testId = '',
     additionalProps,
-    displayMode,
+    displayMode
   } = props;
   const pConn = getPConnect();
   const actions = pConn.getActionsApi();
@@ -53,7 +53,7 @@ export const PegaExtensionsCheckboxRow = (props: CheckboxRowProps) => {
 
   let { readOnly, required, disabled } = props;
   [readOnly, required, disabled] = [readOnly, required, disabled].map(
-    (prop) => prop === true || (typeof prop === 'string' && prop === 'true'),
+    prop => prop === true || (typeof prop === 'string' && prop === 'true')
   );
 
   const [inputValue, setInputValue] = useState(value);
@@ -99,7 +99,7 @@ export const PegaExtensionsCheckboxRow = (props: CheckboxRowProps) => {
           const data: any = getNestedValue(storeData, pageRef);
 
           /* Iterate over object - if a property is of type boolean - call updateFieldValue to set the value to e.currentTarget.checked */
-          Object.keys(data).forEach((key) => {
+          Object.keys(data).forEach(key => {
             if (typeof data[key] === 'boolean') {
               const otherPropName = `.${key}`;
               if (otherPropName !== propName) {

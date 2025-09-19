@@ -1,5 +1,5 @@
 import type { StoryObj } from '@storybook/react';
-import { LHCExtensionsDisplayDate } from './index';
+import LHCExtensionsDisplayDate from './index';
 
 export default {
   title: 'LHC Extensions/Display Date',

@@ -1,4 +1,10 @@
-import { type themeDefinition, tryCatch, Card, defaultThemeProp, StyledFieldValueList } from '@pega/cosmos-react-core';
+import {
+  type themeDefinition,
+  tryCatch,
+  Card,
+  defaultThemeProp,
+  StyledFieldValueList
+} from '@pega/cosmos-react-core';
 import styled, { css } from 'styled-components';
 import { transparentize } from 'polished';
 

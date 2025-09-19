@@ -7,11 +7,18 @@ import {
   useState,
   type KeyboardEvent,
   useEffect,
-  useRef,
+  useRef
 } from 'react';
 import type { FunctionComponent, PropsWithoutRef, MouseEvent, CSSProperties } from 'react';
 
-import { Flex, useConsolidatedRef, useFocusWithin, treeHelpers, Button, Link } from '@pega/cosmos-react-core';
+import {
+  Flex,
+  useConsolidatedRef,
+  useFocusWithin,
+  treeHelpers,
+  Button,
+  Link
+} from '@pega/cosmos-react-core';
 import type { ForwardProps } from '@pega/cosmos-react-core';
 
 import {
@@ -22,14 +29,14 @@ import {
   StyledLabelContent,
   StyledToggleIcon,
   StyledCustomTreeLeaf,
-  StyledCustomTreeNode,
+  StyledCustomTreeNode
 } from './CustomTree.styles';
 
 import type {
   CustomTreeContextProps,
   CustomTreeNode,
   CustomTreeProps,
-  CustomTreePropsWithDefaults,
+  CustomTreePropsWithDefaults
 } from './CustomTree.types';
 
 const CustomTreeContext = createContext<
@@ -52,7 +59,7 @@ const CustomTreeContext = createContext<
   lastNodeId: undefined,
   getPConnect: undefined,
   focusedNodeId: undefined,
-  changeFocusedNodeId: () => {},
+  changeFocusedNodeId: () => {}
 });
 
 const NodeRenderer: FunctionComponent<
@@ -62,9 +69,26 @@ const NodeRenderer: FunctionComponent<
     subTree?: React.ReactNode;
     onClick?: (id: string, event: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>) => void;
   }
-> = ({ id, label, depth, hasParentSibling, nodes, expanded = false, subTree, onClick, href, objclass }) => {
-  const { currentNodeId, onNodeClick, onNodeToggle, focusedNodeId, changeFocusedNodeId, getPConnect } =
-    useContext(CustomTreeContext);
+> = ({
+  id,
+  label,
+  depth,
+  hasParentSibling,
+  nodes,
+  expanded = false,
+  subTree,
+  onClick,
+  href,
+  objclass
+}) => {
+  const {
+    currentNodeId,
+    onNodeClick,
+    onNodeToggle,
+    focusedNodeId,
+    changeFocusedNodeId,
+    getPConnect
+  } = useContext(CustomTreeContext);
   const current = currentNodeId === id;
   const focusedEl = focusedNodeId === id;
 
@@ -77,7 +101,7 @@ const NodeRenderer: FunctionComponent<
       onNodeClick?.(id, e);
       changeFocusedNodeId(id);
     },
-    [id, onNodeClick, changeFocusedNodeId],
+    [id, onNodeClick, changeFocusedNodeId]
   );
 
   const handleParentToggle = useCallback(
@@ -87,7 +111,7 @@ const NodeRenderer: FunctionComponent<
       onNodeToggle?.(id, e);
       changeFocusedNodeId(id);
     },
-    [id, onNodeToggle, changeFocusedNodeId],
+    [id, onNodeToggle, changeFocusedNodeId]
   );
 
   const elRef = useRef<HTMLDivElement>(null);
@@ -105,7 +129,9 @@ const NodeRenderer: FunctionComponent<
           href={href}
           previewable
           onPreview={() => {
-            getPConnect().getActionsApi().showCasePreview(encodeURI(id), { caseClassName: objclass });
+            getPConnect()
+              .getActionsApi()
+              .showCasePreview(encodeURI(id), { caseClassName: objclass });
           }}
           onClick={(e: MouseEvent<HTMLButtonElement>) => {
             /* for links - need to set onClick for spa to avoid full reload - (cmd | ctrl) + click for opening in new tab */
@@ -153,7 +179,7 @@ const NodeRenderer: FunctionComponent<
           {
             '--depth': depth,
             '--has-parent': depth ? 1 : 0,
-            '--has-parent-sibling': hasParentSibling ? 1 : 0,
+            '--has-parent-sibling': hasParentSibling ? 1 : 0
           } as CSSProperties
         }
       >
@@ -198,82 +224,99 @@ const NodeRenderer: FunctionComponent<
   );
 };
 
-const CustomTreeWithNodes: FunctionComponent<CustomTreeProps & ForwardProps> = forwardRef(function CustomTreeWithNodes(
-  { nodes, getPConnect, currentNodeId, onNodeClick, onNodeToggle, ...restProps }: PropsWithoutRef<CustomTreeProps>,
-  ref: CustomTreeProps['ref'],
-) {
-  const [focusedNodeId, setFocusedNodedId] = useState<string | undefined>();
-  const treeRef = useConsolidatedRef(ref);
+const CustomTreeWithNodes: FunctionComponent<CustomTreeProps & ForwardProps> = forwardRef(
+  function CustomTreeWithNodes(
+    {
+      nodes,
+      getPConnect,
+      currentNodeId,
+      onNodeClick,
+      onNodeToggle,
+      ...restProps
+    }: PropsWithoutRef<CustomTreeProps>,
+    ref: CustomTreeProps['ref']
+  ) {
+    const [focusedNodeId, setFocusedNodedId] = useState<string | undefined>();
+    const treeRef = useConsolidatedRef(ref);
 
-  const lastNodeId = useMemo(() => {
-    return treeHelpers.getDeepestNode(nodes, nodes[nodes.length - 1].id)?.id;
-  }, [nodes]);
+    const lastNodeId = useMemo(() => {
+      return treeHelpers.getDeepestNode(nodes, nodes[nodes.length - 1].id)?.id;
+    }, [nodes]);
 
-  const changeFocusedNodeId: CustomTreeContextProps['changeFocusedNodeId'] = useCallback(
-    (id, type) => {
-      switch (type) {
-        case 'up': {
-          const previousNode = treeHelpers.getPreviousNode(nodes, id);
-          if (previousNode) setFocusedNodedId(previousNode.id);
-          break;
+    const changeFocusedNodeId: CustomTreeContextProps['changeFocusedNodeId'] = useCallback(
+      (id, type) => {
+        switch (type) {
+          case 'up': {
+            const previousNode = treeHelpers.getPreviousNode(nodes, id);
+            if (previousNode) setFocusedNodedId(previousNode.id);
+            break;
+          }
+          case 'down': {
+            const nextNode = treeHelpers.getNextNode(nodes, id);
+            if (nextNode) setFocusedNodedId(nextNode.id);
+            break;
+          }
+          case 'left': {
+            const parentNode = treeHelpers.getParentNode(nodes, id);
+            if (parentNode) setFocusedNodedId(parentNode.id);
+            break;
+          }
+          case 'right': {
+            const childNode = treeHelpers.getFirstChildNode(nodes, id);
+            if (childNode) setFocusedNodedId(childNode.id);
+            break;
+          }
+          default: {
+            if (id !== focusedNodeId) setFocusedNodedId(id);
+            break;
+          }
         }
-        case 'down': {
-          const nextNode = treeHelpers.getNextNode(nodes, id);
-          if (nextNode) setFocusedNodedId(nextNode.id);
-          break;
-        }
-        case 'left': {
-          const parentNode = treeHelpers.getParentNode(nodes, id);
-          if (parentNode) setFocusedNodedId(parentNode.id);
-          break;
-        }
-        case 'right': {
-          const childNode = treeHelpers.getFirstChildNode(nodes, id);
-          if (childNode) setFocusedNodedId(childNode.id);
-          break;
-        }
-        default: {
-          if (id !== focusedNodeId) setFocusedNodedId(id);
-          break;
-        }
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [nodes],
-  );
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [nodes]
+    );
 
-  const onFocusChange = (focused: boolean) => {
-    if (!focused) setFocusedNodedId('');
-  };
+    const onFocusChange = (focused: boolean) => {
+      if (!focused) setFocusedNodedId('');
+    };
 
-  useFocusWithin([treeRef], onFocusChange);
+    useFocusWithin([treeRef], onFocusChange);
 
-  return (
-    <CustomTreeContext.Provider
-      value={useMemo(
-        () => ({
-          currentNodeId,
-          focusedNodeId,
-          lastNodeId,
-          getPConnect,
-          firstNodeId: nodes[0].id,
-          changeFocusedNodeId,
-          onNodeClick,
-          onNodeToggle,
-        }),
-        [currentNodeId, focusedNodeId, lastNodeId, getPConnect, nodes, changeFocusedNodeId, onNodeClick, onNodeToggle],
-      )}
-    >
-      <StyledCustomTree {...restProps} ref={treeRef} nodes={nodes} nodeRenderer={NodeRenderer} />
-    </CustomTreeContext.Provider>
-  );
-});
+    return (
+      <CustomTreeContext.Provider
+        value={useMemo(
+          () => ({
+            currentNodeId,
+            focusedNodeId,
+            lastNodeId,
+            getPConnect,
+            firstNodeId: nodes[0].id,
+            changeFocusedNodeId,
+            onNodeClick,
+            onNodeToggle
+          }),
+          [
+            currentNodeId,
+            focusedNodeId,
+            lastNodeId,
+            getPConnect,
+            nodes,
+            changeFocusedNodeId,
+            onNodeClick,
+            onNodeToggle
+          ]
+        )}
+      >
+        <StyledCustomTree {...restProps} ref={treeRef} nodes={nodes} nodeRenderer={NodeRenderer} />
+      </CustomTreeContext.Provider>
+    );
+  }
+);
 
-const CustomTree: FunctionComponent<CustomTreeProps & ForwardProps> = forwardRef(function CustomTree(
-  props: PropsWithoutRef<CustomTreeProps>,
-  ref: CustomTreeProps['ref'],
-) {
-  return props.nodes.length > 0 ? <CustomTreeWithNodes {...props} ref={ref} /> : null;
-});
+const CustomTree: FunctionComponent<CustomTreeProps & ForwardProps> = forwardRef(
+  function CustomTree(props: PropsWithoutRef<CustomTreeProps>, ref: CustomTreeProps['ref']) {
+    return props.nodes.length > 0 ? <CustomTreeWithNodes {...props} ref={ref} /> : null;
+  }
+);
 
 export default CustomTree;

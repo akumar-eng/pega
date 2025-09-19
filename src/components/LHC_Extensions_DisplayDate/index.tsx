@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { withConfiguration, Text } from '@pega/cosmos-react-core';
-import '../create-nonce';
 
 // PConnect Props interface for Pega Constellation components
 export interface PConnFieldProps {
@@ -91,7 +90,7 @@ const formatDate = (
   }
 };
 
-export const LHCExtensionsDisplayDate = (props: DisplayDateProps) => {
+const LHCExtensionsDisplayDate = (props: DisplayDateProps) => {
   const {
     value,
     dateFormat = 'dd/mm/yyyy',

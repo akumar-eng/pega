@@ -9,13 +9,113 @@
   "componentKey": "LHC_Extensions_DisplayDate",
   "type": "Field",
   "subtype": "Date",
+  "fieldMetadata": {
+    "classID": "Text"
+  },
   "properties": [
     {
       "name": "value",
-      "label": "Date Value",
-      "description": "The date value to display",
+      "label": "Reference",
       "format": "TEXT",
-      "defaultValue": "@P .pyWorkPage"
+      "group": "field",
+      "required": true,
+      "defaultValue": ""
+    },
+    {
+      "name": "label",
+      "label": "Field label",
+      "format": "TEXT",
+      "group": "field",
+      "defaultValue": ""
+    },
+    {
+      "name": "helperText",
+      "label": "Helper text",
+      "format": "TEXT",
+      "group": "field",
+      "defaultValue": ""
+    },
+    {
+      "name": "placeholder",
+      "label": "Placeholder",
+      "format": "TEXT",
+      "group": "field",
+      "defaultValue": ""
+    },
+    {
+      "name": "testId",
+      "label": "Test ID",
+      "format": "TEXT",
+      "group": "field",
+      "defaultValue": ""
+    },
+    {
+      "name": "visibility",
+      "label": "Visibility",
+      "format": "SELECT",
+      "defaultValue": "true",
+      "source": [
+        {
+          "value": "true",
+          "label": "True"
+        },
+        {
+          "value": "false",
+          "label": "False"
+        }
+      ],
+      "group": "field"
+    },
+    {
+      "name": "disabled",
+      "label": "Disabled",
+      "format": "SELECT",
+      "defaultValue": "false",
+      "source": [
+        {
+          "value": "true",
+          "label": "True"
+        },
+        {
+          "value": "false",
+          "label": "False"
+        }
+      ],
+      "group": "field"
+    },
+    {
+      "name": "readOnly",
+      "label": "Read only",
+      "format": "SELECT",
+      "defaultValue": "false",
+      "source": [
+        {
+          "value": "true",
+          "label": "True"
+        },
+        {
+          "value": "false",
+          "label": "False"
+        }
+      ],
+      "group": "field"
+    },
+    {
+      "name": "required",
+      "label": "Required",
+      "format": "SELECT",
+      "defaultValue": "false",
+      "source": [
+        {
+          "value": "true",
+          "label": "True"
+        },
+        {
+          "value": "false",
+          "label": "False"
+        }
+      ],
+      "group": "field"
     },
     {
       "name": "dateFormat",
@@ -23,6 +123,7 @@
       "description": "Choose the format for displaying the date",
       "format": "SELECT",
       "defaultValue": "dd/mm/yyyy",
+      "group": "field",
       "options": [
         {
           "key": "dd/mm/yyyy",
@@ -59,7 +160,8 @@
       "label": "Show Time",
       "description": "Include time component in the display",
       "format": "BOOLEAN",
-      "defaultValue": false
+      "defaultValue": false,
+      "group": "field"
     },
     {
       "name": "timeFormat",
@@ -67,6 +169,7 @@
       "description": "Choose 12-hour or 24-hour time format",
       "format": "SELECT",
       "defaultValue": "12",
+      "group": "field",
       "options": [
         {
           "key": "12",
@@ -84,6 +187,7 @@
       "description": "Language and region settings for date formatting",
       "format": "SELECT",
       "defaultValue": "en-US",
+      "group": "field",
       "options": [
         {
           "key": "en-US",
@@ -124,70 +228,25 @@
       "label": "Empty Value Display",
       "description": "Text to display when date value is empty or null",
       "format": "TEXT",
-      "defaultValue": "-"
-    },
-    {
-      "name": "label",
-      "label": "Field Label",
-      "description": "Label text for the date field",
-      "format": "TEXT",
-      "defaultValue": ""
-    },
-    {
-      "name": "hideLabel",
-      "label": "Hide Label",
-      "description": "Hide the field label when displaying",
-      "format": "BOOLEAN",
-      "defaultValue": false
-    },
-    {
-      "name": "helperText",
-      "label": "Helper Text",
-      "description": "Additional help text displayed below the field",
-      "format": "TEXT",
-      "defaultValue": ""
-    },
-    {
-      "name": "testId",
-      "label": "Test ID",
-      "description": "Unique identifier for testing purposes",
-      "format": "TEXT",
-      "defaultValue": ""
-    },
-    {
-      "name": "variant",
-      "label": "Display Variant",
-      "description": "Visual styling variant for the date display",
-      "format": "SELECT",
-      "defaultValue": "default",
-      "options": [
-        {
-          "key": "default",
-          "value": "Default"
-        },
-        {
-          "key": "compact",
-          "value": "Compact"
-        },
-        {
-          "key": "detailed",
-          "value": "Detailed"
-        }
-      ]
+      "defaultValue": "-",
+      "group": "field"
     }
   ],
   "defaultConfig": {
-    "value": "@P .pyWorkPage",
+    "value": "",
+    "label": "",
+    "helperText": "",
+    "placeholder": "",
+    "testId": "",
+    "visibility": "true",
+    "disabled": "false",
+    "readOnly": "false",
+    "required": "false",
     "dateFormat": "dd/mm/yyyy",
     "showTime": false,
     "timeFormat": "12",
     "locale": "en-US",
-    "emptyValueDisplay": "-",
-    "label": "",
-    "hideLabel": false,
-    "helperText": "",
-    "testId": "",
-    "variant": "default"
+    "emptyValueDisplay": "-"
   },
   "presets": [
     {

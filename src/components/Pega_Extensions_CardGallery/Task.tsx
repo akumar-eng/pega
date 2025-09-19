@@ -1,4 +1,13 @@
-import { Progress, Button, Icon, Card, CardHeader, CardContent, Text, useTheme } from '@pega/cosmos-react-core';
+import {
+  Progress,
+  Button,
+  Icon,
+  Card,
+  CardHeader,
+  CardContent,
+  Text,
+  useTheme
+} from '@pega/cosmos-react-core';
 import { StyledCardContent } from './styles';
 
 export type TaskProps = {
@@ -44,7 +53,7 @@ export const Task = (props: TaskProps) => {
               message={(window as any).PCore.getLocaleUtils().getLocaleValue(
                 'Loading content...',
                 'Generic',
-                '@BASECLASS!GENERIC!PYGENERICFIELDS',
+                '@BASECLASS!GENERIC!PYGENERICFIELDS'
               )}
             />
           )}

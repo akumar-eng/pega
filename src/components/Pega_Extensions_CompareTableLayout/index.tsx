@@ -11,9 +11,13 @@ import {
   Icon,
   registerIcon,
   useTheme,
-  Checkbox,
+  Checkbox
 } from '@pega/cosmos-react-core';
-import StyledPegaExtensionsCompareTableLayoutWrapper, { SelectedBgCell, SelectedBgTh, SelectedCell } from './styles';
+import StyledPegaExtensionsCompareTableLayoutWrapper, {
+  SelectedBgCell,
+  SelectedBgTh,
+  SelectedCell
+} from './styles';
 import '../create-nonce';
 
 // includes in bundle
@@ -77,8 +81,8 @@ export const PegaExtensionsCompareTableLayout = (props: TableLayoutProps) => {
         text: `${val}`,
         value: `${val}`,
         label: '',
-        displayMode: 'DISPLAY_ONLY',
-      },
+        displayMode: 'DISPLAY_ONLY'
+      }
     };
     if (componentType === 'Checkbox') {
       if (val === 'true' || val) {
@@ -111,10 +115,10 @@ export const PegaExtensionsCompareTableLayout = (props: TableLayoutProps) => {
           (window as any).PCore.getAssetLoader()
             .getLoader('component-loader')([child.componentType])
             .then(() => {
-              setNumFields((prevCount) => prevCount + 1);
+              setNumFields(prevCount => prevCount + 1);
             });
         } else {
-          setNumFields((prevCount) => prevCount + 1);
+          setNumFields(prevCount => prevCount + 1);
         }
         if (typeof selectionProperty !== 'undefined' && child.label === 'ID') {
           child.value.forEach((val: any, index: number) => {
@@ -145,7 +149,7 @@ export const PegaExtensionsCompareTableLayout = (props: TableLayoutProps) => {
         message={(window as any).PCore.getLocaleUtils().getLocaleValue(
           'Loading content...',
           'Generic',
-          '@BASECLASS!GENERIC!PYGENERICFIELDS',
+          '@BASECLASS!GENERIC!PYGENERICFIELDS'
         )}
       />
     );
@@ -166,7 +170,10 @@ export const PegaExtensionsCompareTableLayout = (props: TableLayoutProps) => {
                   fvl.push({
                     id: child.label,
                     name: child.label,
-                    value: child.value && child.value.length >= i ? genField(child.componentType, child.value[i]) : '',
+                    value:
+                      child.value && child.value.length >= i
+                        ? genField(child.componentType, child.value[i])
+                        : ''
                   });
                 }
               }
@@ -206,8 +213,8 @@ export const PegaExtensionsCompareTableLayout = (props: TableLayoutProps) => {
                 type: 'Text',
                 config: {
                   text: val,
-                  displayMode: 'DISPLAY_ONLY',
-                },
+                  displayMode: 'DISPLAY_ONLY'
+                }
               };
               return (
                 <SelectedBgTh
@@ -238,7 +245,11 @@ export const PegaExtensionsCompareTableLayout = (props: TableLayoutProps) => {
                 );
               }
               /* Show a selection with radioButton if the label is called ID and the selectionProperty is provided */
-              if (child.label === 'ID' && typeof selectionProperty !== 'undefined' && metadata.config.selectionProperty)
+              if (
+                child.label === 'ID' &&
+                typeof selectionProperty !== 'undefined' &&
+                metadata.config.selectionProperty
+              )
                 return (
                   <tr key={`reg-row-${i}`}>
                     <th>{getPConnect().getLocalizedValue('Selection')}</th>
@@ -272,7 +283,11 @@ export const PegaExtensionsCompareTableLayout = (props: TableLayoutProps) => {
                     child.value.map((val: any, j: number) => {
                       const isSelected = selection.length >= j ? selection[j] : false;
                       return (
-                        <SelectedBgCell theme={theme} isSelected={isSelected} key={`${tableId}-row-${i}-${j}`}>
+                        <SelectedBgCell
+                          theme={theme}
+                          isSelected={isSelected}
+                          key={`${tableId}-row-${i}-${j}`}
+                        >
                           {genField(child.componentType, val)}
                         </SelectedBgCell>
                       );

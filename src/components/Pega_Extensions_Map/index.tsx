@@ -6,7 +6,7 @@ import {
   CardContent,
   CardHeader,
   Button,
-  Progress,
+  Progress
 } from '@pega/cosmos-react-core';
 import type MapView from '@arcgis/core/views/MapView';
 import type Map from '@arcgis/core/views/MapView';
@@ -15,7 +15,14 @@ import type Draw from '@arcgis/core/views/draw/Draw';
 import type Graphic from '@arcgis/core/Graphic';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyledClearBtn, StyledPegaExtensionsMap } from './styles';
-import { getAllFields, renderShapes, createGraphic, deletePoints, addPoint, addScreenShot } from './utils';
+import {
+  getAllFields,
+  renderShapes,
+  createGraphic,
+  deletePoints,
+  addPoint,
+  addScreenShot
+} from './utils';
 import '../create-nonce';
 
 const ARCGIS_VERSION = '4.33';
@@ -108,7 +115,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
     selectionProperty,
     bFreeFormDrawing = false,
     bShowSearch = false,
-    apiKey = '',
+    apiKey = ''
   } = props;
   const theme = useTheme();
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
@@ -126,25 +133,29 @@ export const PegaExtensionsMap = (props: MapProps) => {
   const genShapeObject = (graphic: Graphic) => {
     if (graphic.geometry?.type === 'polygon') {
       const coordinates: { x: number; y: number }[] = [];
-      graphic.geometry.rings.forEach((ring) => ring.map((coord) => coordinates.push({ x: coord[0], y: coord[1] })));
+      graphic.geometry.rings.forEach(ring =>
+        ring.map(coord => coordinates.push({ x: coord[0], y: coord[1] }))
+      );
 
       return {
         type: 'polygon',
-        coordinates,
+        coordinates
       };
     }
     if (graphic.geometry?.type === 'polyline') {
       const coordinates: { x: number; y: number }[] = [];
-      graphic.geometry.paths.forEach((path) => path.map((coord) => coordinates.push({ x: coord[0], y: coord[1] })));
+      graphic.geometry.paths.forEach(path =>
+        path.map(coord => coordinates.push({ x: coord[0], y: coord[1] }))
+      );
       return {
         type: 'polyline',
-        coordinates,
+        coordinates
       };
     }
     const elem: any = graphic.geometry;
     return {
       type: 'point',
-      coordinates: { x: elem.longitude, y: elem.latitude },
+      coordinates: { x: elem.longitude, y: elem.latitude }
     };
   };
   // This function is called when a shape is added or removed by the sketch widget.
@@ -158,7 +169,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
       const listShapes: ShapeDefinition[] = [];
 
       // Filter and process polygon graphics
-      graphics.forEach((graphic) => {
+      graphics.forEach(graphic => {
         listShapes.push(genShapeObject(graphic));
       });
 
@@ -184,7 +195,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
       longitudePropRef,
       imageMapRef,
       Graphic,
-      webMercatorUtils,
+      webMercatorUtils
     } = vars;
     if (view) {
       // create a polyline from returned vertices
@@ -193,9 +204,12 @@ export const PegaExtensionsMap = (props: MapProps) => {
       }
       if (event.type === 'draw-complete') {
         const action = draw.create('polyline');
-        action.on(['vertex-add', 'vertex-remove', 'cursor-update', 'redo', 'undo', 'draw-complete'], (newEvent) => {
-          updateVertices({ ...vars, event: newEvent });
-        });
+        action.on(
+          ['vertex-add', 'vertex-remove', 'cursor-update', 'redo', 'undo', 'draw-complete'],
+          newEvent => {
+            updateVertices({ ...vars, event: newEvent });
+          }
+        );
 
         /* Update the cache with the set of instructions - only clear if the last action was not the clear action */
         if (!isLastActionClear.current) {
@@ -204,7 +218,16 @@ export const PegaExtensionsMap = (props: MapProps) => {
           isLastActionClear.current = false;
         }
         event.vertices.forEach((x: any, index: number) => {
-          addPoint(getPConnect, props, embedDataRef, longitudePropRef, latitudePropRef, index, x, webMercatorUtils);
+          addPoint(
+            getPConnect,
+            props,
+            embedDataRef,
+            longitudePropRef,
+            latitudePropRef,
+            index,
+            x,
+            webMercatorUtils
+          );
         });
         numPoints.current = event.vertices.length;
 
@@ -219,19 +242,29 @@ export const PegaExtensionsMap = (props: MapProps) => {
       config.apiKey = apiKey; // Set the ArCGIS API key
     }
 
-    const [Sketch, Search, Track, Map, Draw, GraphicsLayer, MapView, Graphic, webMercatorUtils, SpatialReference] =
-      await (window as any).$arcgis.import([
-        '@arcgis/core/widgets/Sketch.js',
-        '@arcgis/core/widgets/Search.js',
-        '@arcgis/core/widgets/Track.js',
-        '@arcgis/core/Map.js',
-        '@arcgis/core/views/draw/Draw.js',
-        '@arcgis/core/layers/GraphicsLayer.js',
-        '@arcgis/core/views/MapView.js',
-        '@arcgis/core/Graphic.js',
-        '@arcgis/core/geometry/support/webMercatorUtils.js',
-        '@arcgis/core/geometry/SpatialReference.js',
-      ]);
+    const [
+      Sketch,
+      Search,
+      Track,
+      Map,
+      Draw,
+      GraphicsLayer,
+      MapView,
+      Graphic,
+      webMercatorUtils,
+      SpatialReference
+    ] = await (window as any).$arcgis.import([
+      '@arcgis/core/widgets/Sketch.js',
+      '@arcgis/core/widgets/Search.js',
+      '@arcgis/core/widgets/Track.js',
+      '@arcgis/core/Map.js',
+      '@arcgis/core/views/draw/Draw.js',
+      '@arcgis/core/layers/GraphicsLayer.js',
+      '@arcgis/core/views/MapView.js',
+      '@arcgis/core/Graphic.js',
+      '@arcgis/core/geometry/support/webMercatorUtils.js',
+      '@arcgis/core/geometry/SpatialReference.js'
+    ]);
     const tmpFields: any = getAllFields(getPConnect);
 
     let embedDataRef = '';
@@ -249,7 +282,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
         getPConnect().getContextName(),
         'caseInfo.content',
         getPConnect().meta.name,
-        'Locations',
+        'Locations'
       );
     }
 
@@ -299,7 +332,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
       map = new Map({
         basemap: 'streets-vector',
         spatialReference,
-        layers: [ptLayer],
+        layers: [ptLayer]
       });
 
       // Create the MapView with the specified container and properties
@@ -312,7 +345,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
             map,
             center: [parseFloat(LatLong[1]), parseFloat(LatLong[0])],
             zoom: parseFloat(ZoomRef),
-            spatialReference,
+            spatialReference
           });
         }
       }
@@ -323,12 +356,12 @@ export const PegaExtensionsMap = (props: MapProps) => {
           map,
           center: [parseFloat(Longitude), parseFloat(Latitude)],
           zoom: parseFloat(Zoom),
-          spatialReference,
+          spatialReference
         });
       }
       if (view) {
         const draw = new Draw({
-          view,
+          view
         });
 
         if (displayMode !== 'DISPLAY_ONLY') {
@@ -336,7 +369,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
             const sketchWidget = new Sketch({
               view,
               layer: ptLayer,
-              availableCreateTools: createTools.split(',').map((tool) => tool.toLowerCase().trim()),
+              availableCreateTools: createTools.split(',').map(tool => tool.toLowerCase().trim())
             });
             sketchWidget.on(['create', 'delete', 'update'], (event: any) => {
               updateShapeDefinition(event, ptLayer);
@@ -345,7 +378,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
           }
           if (bShowSearch) {
             const searchWidget = new Search({
-              view,
+              view
             });
             view.ui.add(searchWidget, 'top-right');
             if (locationRef) {
@@ -359,8 +392,8 @@ export const PegaExtensionsMap = (props: MapProps) => {
                     options: {
                       context: getPConnect().getContextName(),
                       pageReference: `caseInfo.content${locationRef}`,
-                      target: getPConnect().getTarget(),
-                    },
+                      target: getPConnect().getTarget()
+                    }
                   };
                   const c11nEnv = (window as any).PCore.createPConnect(messageConfig);
                   const actionsApi = c11nEnv.getPConnect().getActionsApi();
@@ -370,7 +403,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
               });
             }
             const track = new Track({
-              view,
+              view
             });
             view.ui.add(track, 'top-left');
           }
@@ -381,8 +414,8 @@ export const PegaExtensionsMap = (props: MapProps) => {
                 {
                   component: btnClearRef.current,
                   position: 'top-right',
-                  index: 1,
-                },
+                  index: 1
+                }
               ]);
             }
 
@@ -400,9 +433,9 @@ export const PegaExtensionsMap = (props: MapProps) => {
                   longitudePropRef,
                   imageMapRef,
                   Graphic,
-                  webMercatorUtils,
+                  webMercatorUtils
                 });
-              },
+              }
             );
 
             if (btnClearRef?.current) {
@@ -439,7 +472,17 @@ export const PegaExtensionsMap = (props: MapProps) => {
       view?.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Latitude, Longitude, Zoom, bFreeFormDrawing, bShowSearch, createTools, displayMode, selectionProperty, apiKey]);
+  }, [
+    Latitude,
+    Longitude,
+    Zoom,
+    bFreeFormDrawing,
+    bShowSearch,
+    createTools,
+    displayMode,
+    selectionProperty,
+    apiKey
+  ]);
 
   useEffect(() => {
     let importMap: HTMLScriptElement | null = null;
@@ -452,8 +495,8 @@ export const PegaExtensionsMap = (props: MapProps) => {
         importMap.type = 'importmap';
         importMap.textContent = JSON.stringify({
           imports: {
-            '@arcgis/core/': `https://js.arcgis.com/${ARCGIS_VERSION}/@arcgis/core/`,
-          },
+            '@arcgis/core/': `https://js.arcgis.com/${ARCGIS_VERSION}/@arcgis/core/`
+          }
         });
         document.head.appendChild(importMap);
 
@@ -469,7 +512,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
         document.head.appendChild(arcgisCore);
 
         // Wait for Map components script to load
-        await new Promise((resolve) => {
+        await new Promise(resolve => {
           if (arcgisCore) {
             arcgisCore.onload = resolve;
           } else {
@@ -504,7 +547,7 @@ export const PegaExtensionsMap = (props: MapProps) => {
         message={(window as any).PCore.getLocaleUtils().getLocaleValue(
           'Loading content...',
           'Generic',
-          '@BASECLASS!GENERIC!PYGENERICFIELDS',
+          '@BASECLASS!GENERIC!PYGENERICFIELDS'
         )}
       />
     );
