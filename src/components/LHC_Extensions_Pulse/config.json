@@ -1,0 +1,153 @@
+{
+  "name": "LHC_Extensions_Pulse",
+  "label": "Pulse Feed",
+  "description": "Display pulse messages and activity feed with configurable options",
+  "organization": "LHC",
+  "version": "1.0.0",
+  "library": "Extensions",
+  "allowedApplications": [],
+  "componentKey": "LHC_Extensions_Pulse",
+  "type": "Field",
+  "subtype": "Text",
+  "properties": [
+    {
+      "name": "messageIDs",
+      "label": "Message IDs",
+      "description": "Property path for pulse message IDs",
+      "format": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "name": "showTimestamp",
+      "label": "Show Timestamp",
+      "description": "Display timestamp for each pulse message",
+      "format": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "maxMessages",
+      "label": "Maximum Messages",
+      "description": "Maximum number of pulse messages to display",
+      "format": "NUMBER",
+      "defaultValue": 10,
+      "minValue": 1,
+      "maxValue": 100
+    },
+    {
+      "name": "enableRefresh",
+      "label": "Enable Refresh",
+      "description": "Allow manual refresh of pulse messages",
+      "format": "BOOLEAN",
+      "defaultValue": false
+    },
+    {
+      "name": "refreshInterval",
+      "label": "Refresh Interval (ms)",
+      "description": "Auto-refresh interval in milliseconds",
+      "format": "NUMBER",
+      "defaultValue": 30000,
+      "minValue": 5000,
+      "maxValue": 300000
+    },
+    {
+      "name": "emptyText",
+      "label": "Empty State Text",
+      "description": "Text to display when no messages are available",
+      "format": "TEXT",
+      "defaultValue": "No pulse messages available"
+    },
+    {
+      "name": "headerText",
+      "label": "Header Text",
+      "description": "Header text for the pulse feed",
+      "format": "TEXT",
+      "defaultValue": "Pulse Feed"
+    },
+    {
+      "name": "variant",
+      "label": "Display Variant",
+      "description": "Choose the display style for pulse messages",
+      "format": "SELECT",
+      "defaultValue": "default",
+      "options": [
+        {
+          "key": "default",
+          "value": "Default View"
+        },
+        {
+          "key": "compact",
+          "value": "Compact View"
+        },
+        {
+          "key": "detailed",
+          "value": "Detailed View"
+        }
+      ]
+    },
+    {
+      "name": "showAuthor",
+      "label": "Show Author",
+      "description": "Display author information for each message",
+      "format": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "name": "showActions",
+      "label": "Show Actions",
+      "description": "Display action buttons for each message",
+      "format": "BOOLEAN",
+      "defaultValue": false
+    }
+  ],
+  "defaultConfig": {
+    "messageIDs": "@P .messageIDs",
+    "showTimestamp": true,
+    "maxMessages": 10,
+    "enableRefresh": false,
+    "refreshInterval": 30000,
+    "emptyText": "No pulse messages available",
+    "headerText": "Pulse Feed",
+    "variant": "default",
+    "showAuthor": true,
+    "showActions": false
+  },
+  "presets": [
+    {
+      "name": "basicFeed",
+      "label": "Basic Feed",
+      "description": "Simple pulse feed with timestamps",
+      "values": {
+        "variant": "default",
+        "showTimestamp": true,
+        "showAuthor": true,
+        "showActions": false,
+        "maxMessages": 10
+      }
+    },
+    {
+      "name": "compactFeed",
+      "label": "Compact Feed",
+      "description": "Space-efficient pulse feed",
+      "values": {
+        "variant": "compact",
+        "showTimestamp": false,
+        "showAuthor": false,
+        "showActions": false,
+        "maxMessages": 20
+      }
+    },
+    {
+      "name": "detailedFeed",
+      "label": "Detailed Feed",
+      "description": "Full-featured pulse feed with all options",
+      "values": {
+        "variant": "detailed",
+        "showTimestamp": true,
+        "showAuthor": true,
+        "showActions": true,
+        "enableRefresh": true,
+        "maxMessages": 5
+      }
+    }
+  ]
+}

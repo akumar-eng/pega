@@ -15,7 +15,15 @@ export default {
     },
     dateFormat: {
       control: 'select',
-      options: ['dd/mm/yyyy', 'mm/dd/yyyy', 'yyyy-mm-dd', 'dd-mm-yyyy', 'mm-dd-yyyy', 'yyyy/mm/dd', 'dd.mm.yyyy'],
+      options: [
+        'dd/mm/yyyy',
+        'mm/dd/yyyy',
+        'yyyy-mm-dd',
+        'dd-mm-yyyy',
+        'mm-dd-yyyy',
+        'yyyy/mm/dd',
+        'dd.mm.yyyy'
+      ],
       description: 'Date format pattern'
     },
     showTime: {

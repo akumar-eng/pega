@@ -25,13 +25,13 @@ const formatDate = (
   try {
     // Parse the date - handle various input formats
     let date: Date;
-    
+
     // If it's already a Date object
     if (dateValue instanceof Date) {
       date = dateValue;
     }
     // If it's a timestamp
-    else if (!isNaN(Number(dateValue))) {
+    else if (!Number.isNaN(Number(dateValue))) {
       date = new Date(Number(dateValue));
     }
     // If it's a string
@@ -40,7 +40,7 @@ const formatDate = (
     }
 
     // Check if date is valid
-    if (isNaN(date.getTime())) {
+    if (Number.isNaN(date.getTime())) {
       return String(dateValue); // Return original value if parsing fails
     }
 
@@ -63,7 +63,7 @@ const formatDate = (
         minute: '2-digit',
         hour12: timeFormat === '12'
       };
-      
+
       const timeString = date.toLocaleTimeString(locale, options);
       formattedDate += ` ${timeString}`;
     }
@@ -76,26 +76,27 @@ const formatDate = (
 };
 
 export const LHCExtensionsDisplayDate = (props: DisplayDateProps) => {
-  const { 
-    value, 
-    dateFormat = 'dd/mm/yyyy', 
-    showTime = false, 
+  const {
+    value,
+    dateFormat = 'dd/mm/yyyy',
+    showTime = false,
     timeFormat = '12',
     locale = 'en-US',
     emptyValueDisplay = '-',
-    getPConnect 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getPConnect
   } = props;
 
   const formattedDate = useMemo(() => {
     if (!value || value.trim() === '') {
       return emptyValueDisplay;
     }
-    
+
     return formatDate(value, dateFormat, showTime, timeFormat, locale);
   }, [value, dateFormat, showTime, timeFormat, locale, emptyValueDisplay]);
 
   return (
-    <Text variant="primary" style={{ fontFamily: 'inherit' }}>
+    <Text variant='primary' style={{ fontFamily: 'inherit' }}>
       {formattedDate}
     </Text>
   );

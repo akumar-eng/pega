@@ -632,14 +632,7 @@ const getDetailedFileExtensions = (categories: string) => {
         ];
         break;
       case 'presentation':
-        extensionsByCategory.Presentations = [
-          '.ppt',
-          '.pptx',
-          '.pptm',
-          '.potx',
-          '.ppsx',
-          '.odp'
-        ];
+        extensionsByCategory.Presentations = ['.ppt', '.pptx', '.pptm', '.potx', '.ppsx', '.odp'];
         break;
       case 'image':
         extensionsByCategory.Images = [

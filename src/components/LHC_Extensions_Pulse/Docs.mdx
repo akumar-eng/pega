@@ -1,0 +1,212 @@
+# LHC_Extensions_Pulse
+
+A React TypeScript component for displaying pulse messages and activity feeds in Pega Constellation applications. This component is adapted from the Pega Web Components SDK Pulse component and enhanced for the Constellation framework.
+
+## Overview
+
+The LHC_Extensions_Pulse component provides a configurable interface for displaying pulse messages, activity feeds, and real-time updates. It supports multiple display variants, refresh capabilities, and extensive customization options.
+
+## Features
+
+### Core Functionality
+
+- **Pulse Message Display**: Shows activity feed and pulse messages
+- **Multiple Display Variants**: Default, compact, and detailed views
+- **Real-time Updates**: Optional auto-refresh and manual refresh capabilities
+- **Configurable Limits**: Set maximum number of messages to display
+- **Empty State Handling**: Customizable message when no data is available
+
+### Display Options
+
+- **Timestamp Display**: Show/hide message timestamps
+- **Author Information**: Display message author details
+- **Action Buttons**: Enable interactive actions on messages
+- **Custom Headers**: Configurable header text
+- **Responsive Design**: Adapts to different screen sizes
+
+### Technical Features
+
+- **TypeScript Support**: Full type safety and IntelliSense
+- **Pega Cosmos Integration**: Uses Pega's design system components
+- **Development Mode**: Enhanced debugging and logging in development
+- **Accessibility**: ARIA-compliant and keyboard accessible
+- **Performance Optimized**: Efficient rendering and state management
+
+## Usage
+
+### Basic Implementation
+
+```tsx
+import LHC_Extensions_Pulse from './LHC_Extensions_Pulse';
+
+<LHC_Extensions_Pulse
+  messageIDs='.PulseMessages'
+  headerText='Activity Feed'
+  maxMessages={10}
+  showTimestamp={true}
+  getPConnect={getPConnect}
+/>;
+```
+
+### Advanced Configuration
+
+```tsx
+<LHC_Extensions_Pulse
+  messageIDs='.CustomPulseData'
+  headerText='Team Updates'
+  variant='detailed'
+  maxMessages={15}
+  showTimestamp={true}
+  showAuthor={true}
+  showActions={true}
+  enableRefresh={true}
+  refreshInterval={30000}
+  emptyText='No team updates available'
+  getPConnect={getPConnect}
+/>
+```
+
+## Properties
+
+| Property          | Type     | Default                         | Description                                         |
+| ----------------- | -------- | ------------------------------- | --------------------------------------------------- |
+| `messageIDs`      | string   | `""`                            | Property path for pulse message IDs                 |
+| `showTimestamp`   | boolean  | `true`                          | Display timestamp for each message                  |
+| `maxMessages`     | number   | `10`                            | Maximum number of messages to display (1-100)       |
+| `enableRefresh`   | boolean  | `false`                         | Allow manual refresh of messages                    |
+| `refreshInterval` | number   | `30000`                         | Auto-refresh interval in milliseconds (5000-300000) |
+| `emptyText`       | string   | `"No pulse messages available"` | Text shown when no messages exist                   |
+| `headerText`      | string   | `"Pulse Feed"`                  | Header text for the component                       |
+| `variant`         | string   | `"default"`                     | Display style: "default", "compact", "detailed"     |
+| `showAuthor`      | boolean  | `true`                          | Display author information                          |
+| `showActions`     | boolean  | `false`                         | Display action buttons                              |
+| `getPConnect`     | function | -                               | Pega connection function (required)                 |
+
+## Display Variants
+
+### Default View
+
+- Standard pulse message layout
+- Shows timestamp and author by default
+- Balanced information density
+- Good for general use cases
+
+### Compact View
+
+- Space-efficient layout
+- Minimal information display
+- Higher message density
+- Ideal for sidebars or small spaces
+
+### Detailed View
+
+- Full-featured layout
+- Shows all available information
+- Action buttons enabled
+- Best for main content areas
+
+## Configuration Presets
+
+The component includes three built-in presets:
+
+### Basic Feed
+
+```json
+{
+  "variant": "default",
+  "showTimestamp": true,
+  "showAuthor": true,
+  "showActions": false,
+  "maxMessages": 10
+}
+```
+
+### Compact Feed
+
+```json
+{
+  "variant": "compact",
+  "showTimestamp": false,
+  "showAuthor": false,
+  "showActions": false,
+  "maxMessages": 20
+}
+```
+
+### Detailed Feed
+
+```json
+{
+  "variant": "detailed",
+  "showTimestamp": true,
+  "showAuthor": true,
+  "showActions": true,
+  "enableRefresh": true,
+  "maxMessages": 5
+}
+```
+
+## Implementation Status
+
+### ✅ Completed Features
+
+- Component structure and TypeScript interfaces
+- Configuration system with validation
+- Multiple display variants
+- Storybook integration
+- Development mode debugging
+- Basic styling and layout
+
+### 🚧 In Development
+
+- Pulse message data fetching logic
+- Real-time refresh functionality
+- Message rendering system
+- Action button handlers
+- Enhanced styling system
+
+### 📋 Planned Features
+
+- WebSocket integration for real-time updates
+- Message filtering and search
+- Infinite scroll for large datasets
+- Custom message templates
+- Export functionality
+- Advanced accessibility features
+
+## Development Notes
+
+This component is currently in the **structure phase** and provides:
+
+- Complete TypeScript interfaces
+- Configuration system
+- Storybook demos
+- Development debugging tools
+- Foundation for business logic implementation
+
+The next development phase will focus on implementing the actual pulse message fetching, processing, and rendering logic.
+
+## Browser Support
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+## Dependencies
+
+- React 17.0.2+
+- TypeScript 5.8.3+
+- @pega/cosmos-react-core
+- Pega Constellation Framework
+
+## Migration from Web Components
+
+This component is a React TypeScript adaptation of the original Lit-based Pulse component from the Pega Web Components SDK. Key differences:
+
+- **Framework**: Migrated from Lit to React
+- **Language**: Enhanced TypeScript support
+- **Architecture**: Constellation-compatible structure
+- **Configuration**: Extended property system
+- **Testing**: Comprehensive Jest test coverage
+- **Documentation**: Enhanced Storybook integration
