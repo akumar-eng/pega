@@ -1,0 +1,68 @@
+import { Meta, Primary, Controls, Story } from '@storybook/blocks';
+import * as DemoStories from './demo.stories';
+
+<Meta of={DemoStories} />
+
+# Overview
+
+The Display Date component is a field-level component that renders date values in various configurable formats. It provides flexible date formatting options to accommodate different regional preferences and business requirements.
+
+## Key Features
+
+- **Multiple Date Formats**: Supports various date formats including dd/mm/yyyy (European), mm/dd/yyyy (US), yyyy-mm-dd (ISO), and more
+- **Time Display**: Optional time display with 12-hour or 24-hour formats
+- **Internationalization**: Locale-aware time formatting for different regions
+- **Empty Value Handling**: Configurable display text for empty or null date values
+- **Flexible Input**: Accepts various date input formats (ISO strings, timestamps, Date objects)
+
+## Supported Date Formats
+
+- **dd/mm/yyyy** - European format (19/09/2025)
+- **mm/dd/yyyy** - US format (09/19/2025)
+- **yyyy-mm-dd** - ISO format (2025-09-19)
+- **dd-mm-yyyy** - Dash separated European (19-09-2025)
+- **mm-dd-yyyy** - Dash separated US (09-19-2025)
+- **yyyy/mm/dd** - Slash separated ISO (2025/09/19)
+- **dd.mm.yyyy** - Dot separated German style (19.09.2025)
+
+## Time Formats
+
+- **12-hour**: Shows time with AM/PM indicator
+- **24-hour**: Shows time in 24-hour format
+
+## Usage
+
+To use this component:
+
+1. Select a date property from your data model
+2. Choose the desired date format from the configuration options
+3. Optionally enable time display and select 12-hour or 24-hour format
+4. Configure locale for proper time formatting
+5. Set custom text for empty values if needed
+
+<Primary />
+
+## Examples
+
+### Different Date Formats
+
+<Story of={DemoStories.Default} />
+<Story of={DemoStories.USFormat} />
+<Story of={DemoStories.ISOFormat} />
+
+### With Time Display
+
+<Story of={DemoStories.WithTime12Hour} />
+<Story of={DemoStories.WithTime24Hour} />
+
+### Regional Formats
+
+<Story of={DemoStories.GermanFormat} />
+
+### Empty Value Handling
+
+<Story of={DemoStories.EmptyValue} />
+
+## Props
+
+<Controls />
