@@ -1,0 +1,305 @@
+{
+  "name": "LHC_Extensions_DisplayDate",
+  "label": "Display Date",
+  "description": "Display dates in configurable formats with internationalization support",
+  "organization": "LHC",
+  "version": "1.0.0",
+  "library": "Extensions",
+  "allowedApplications": [],
+  "componentKey": "LHC_Extensions_DisplayDate",
+  "type": "Field",
+  "subtype": "Date",
+  "fieldMetadata": {
+    "classID": "Text"
+  },
+  "properties": [
+    {
+      "name": "value",
+      "label": "Reference",
+      "format": "TEXT",
+      "group": "field",
+      "required": true,
+      "defaultValue": ""
+    },
+    {
+      "name": "label",
+      "label": "Field label",
+      "format": "TEXT",
+      "group": "field",
+      "defaultValue": ""
+    },
+    {
+      "name": "helperText",
+      "label": "Helper text",
+      "format": "TEXT",
+      "group": "field",
+      "defaultValue": ""
+    },
+    {
+      "name": "placeholder",
+      "label": "Placeholder",
+      "format": "TEXT",
+      "group": "field",
+      "defaultValue": ""
+    },
+    {
+      "name": "testId",
+      "label": "Test ID",
+      "format": "TEXT",
+      "group": "field",
+      "defaultValue": ""
+    },
+    {
+      "name": "visibility",
+      "label": "Visibility",
+      "format": "SELECT",
+      "defaultValue": "true",
+      "source": [
+        {
+          "value": "true",
+          "label": "True"
+        },
+        {
+          "value": "false",
+          "label": "False"
+        }
+      ],
+      "group": "field"
+    },
+    {
+      "name": "disabled",
+      "label": "Disabled",
+      "format": "SELECT",
+      "defaultValue": "false",
+      "source": [
+        {
+          "value": "true",
+          "label": "True"
+        },
+        {
+          "value": "false",
+          "label": "False"
+        }
+      ],
+      "group": "field"
+    },
+    {
+      "name": "readOnly",
+      "label": "Read only",
+      "format": "SELECT",
+      "defaultValue": "false",
+      "source": [
+        {
+          "value": "true",
+          "label": "True"
+        },
+        {
+          "value": "false",
+          "label": "False"
+        }
+      ],
+      "group": "field"
+    },
+    {
+      "name": "required",
+      "label": "Required",
+      "format": "SELECT",
+      "defaultValue": "false",
+      "source": [
+        {
+          "value": "true",
+          "label": "True"
+        },
+        {
+          "value": "false",
+          "label": "False"
+        }
+      ],
+      "group": "field"
+    },
+    {
+      "name": "dateFormat",
+      "label": "Date Format",
+      "description": "Choose the format for displaying the date",
+      "format": "SELECT",
+      "defaultValue": "dd/mm/yyyy",
+      "group": "field",
+      "options": [
+        {
+          "key": "dd/mm/yyyy",
+          "value": "DD/MM/YYYY (European)"
+        },
+        {
+          "key": "mm/dd/yyyy",
+          "value": "MM/DD/YYYY (US)"
+        },
+        {
+          "key": "yyyy-mm-dd",
+          "value": "YYYY-MM-DD (ISO)"
+        },
+        {
+          "key": "dd-mm-yyyy",
+          "value": "DD-MM-YYYY"
+        },
+        {
+          "key": "mm-dd-yyyy",
+          "value": "MM-DD-YYYY"
+        },
+        {
+          "key": "yyyy/mm/dd",
+          "value": "YYYY/MM/DD"
+        },
+        {
+          "key": "dd.mm.yyyy",
+          "value": "DD.MM.YYYY (German)"
+        }
+      ]
+    },
+    {
+      "name": "showTime",
+      "label": "Show Time",
+      "description": "Include time component in the display",
+      "format": "BOOLEAN",
+      "defaultValue": false,
+      "group": "field"
+    },
+    {
+      "name": "timeFormat",
+      "label": "Time Format",
+      "description": "Choose 12-hour or 24-hour time format",
+      "format": "SELECT",
+      "defaultValue": "12",
+      "group": "field",
+      "options": [
+        {
+          "key": "12",
+          "value": "12-hour (AM/PM)"
+        },
+        {
+          "key": "24",
+          "value": "24-hour"
+        }
+      ]
+    },
+    {
+      "name": "locale",
+      "label": "Locale",
+      "description": "Language and region settings for date formatting",
+      "format": "SELECT",
+      "defaultValue": "en-US",
+      "group": "field",
+      "options": [
+        {
+          "key": "en-US",
+          "value": "English (US)"
+        },
+        {
+          "key": "en-GB",
+          "value": "English (UK)"
+        },
+        {
+          "key": "de-DE",
+          "value": "German"
+        },
+        {
+          "key": "fr-FR",
+          "value": "French"
+        },
+        {
+          "key": "es-ES",
+          "value": "Spanish"
+        },
+        {
+          "key": "it-IT",
+          "value": "Italian"
+        },
+        {
+          "key": "ja-JP",
+          "value": "Japanese"
+        },
+        {
+          "key": "zh-CN",
+          "value": "Chinese (Simplified)"
+        }
+      ]
+    },
+    {
+      "name": "emptyValueDisplay",
+      "label": "Empty Value Display",
+      "description": "Text to display when date value is empty or null",
+      "format": "TEXT",
+      "defaultValue": "-",
+      "group": "field"
+    }
+  ],
+  "defaultConfig": {
+    "value": "",
+    "label": "",
+    "helperText": "",
+    "placeholder": "",
+    "testId": "",
+    "visibility": "true",
+    "disabled": "false",
+    "readOnly": "false",
+    "required": "false",
+    "dateFormat": "dd/mm/yyyy",
+    "showTime": false,
+    "timeFormat": "12",
+    "locale": "en-US",
+    "emptyValueDisplay": "-"
+  },
+  "presets": [
+    {
+      "name": "europeanDate",
+      "label": "European Date Format",
+      "description": "Standard European date format (DD/MM/YYYY)",
+      "values": {
+        "dateFormat": "dd/mm/yyyy",
+        "locale": "en-GB",
+        "showTime": false
+      }
+    },
+    {
+      "name": "americanDate",
+      "label": "American Date Format",
+      "description": "Standard US date format (MM/DD/YYYY)",
+      "values": {
+        "dateFormat": "mm/dd/yyyy",
+        "locale": "en-US",
+        "showTime": false
+      }
+    },
+    {
+      "name": "isoDateTime",
+      "label": "ISO Date and Time",
+      "description": "ISO standard date and time format",
+      "values": {
+        "dateFormat": "yyyy-mm-dd",
+        "showTime": true,
+        "timeFormat": "24",
+        "locale": "en-US"
+      }
+    },
+    {
+      "name": "germanFormat",
+      "label": "German Date Format",
+      "description": "German localized date format",
+      "values": {
+        "dateFormat": "dd.mm.yyyy",
+        "locale": "de-DE",
+        "showTime": false
+      }
+    },
+    {
+      "name": "compactDisplay",
+      "label": "Compact Date Display",
+      "description": "Space-efficient date display",
+      "values": {
+        "variant": "compact",
+        "dateFormat": "dd/mm/yyyy",
+        "hideLabel": true,
+        "showTime": false
+      }
+    }
+  ]
+}
