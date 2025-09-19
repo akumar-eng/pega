@@ -2,7 +2,7 @@ import type { StoryObj } from '@storybook/react';
 import LHCExtensionsDisplayDate from './index';
 
 export default {
-  title: 'LHC Extensions/Display Date',
+  title: 'Fields/Display Date',
   argTypes: {
     getPConnect: {
       table: {

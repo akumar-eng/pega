@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import LhcExtensionsPulse from './index';
 
 const meta: Meta<typeof LhcExtensionsPulse> = {
-  title: 'LHC Extensions/Pulse Feed',
+  title: 'Widgets/Pulse Feed',
   component: LhcExtensionsPulse,
   parameters: {
     layout: 'padded'
