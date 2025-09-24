@@ -283,13 +283,23 @@ export class PulseUtils {
       const randomAuthor = sampleAuthors[Math.floor(Math.random() * sampleAuthors.length)];
       const randomActions = sampleActions[Math.floor(Math.random() * sampleActions.length)];
       
+      // Determine priority based on message index
+      let priority: 'high' | 'medium' | 'low';
+      if (i === 0) {
+        priority = 'high';
+      } else if (i === 1) {
+        priority = 'medium';
+      } else {
+        priority = 'low';
+      }
+
       mockMessages.push({
         id: (i + 1).toString(),
         message: randomMessage,
         author: randomAuthor,
         timestamp: new Date(Date.now() - (i * 300000)).toISOString(), // 5 minutes apart
         actions: randomActions,
-        priority: i === 0 ? 'high' : (i === 1 ? 'medium' : 'low'),
+        priority,
         status: i < 2 ? 'unread' : 'read'
       });
     }
